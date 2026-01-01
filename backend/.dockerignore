@@ -1,0 +1,49 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+docs/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+coverage/
+.nyc_output/
+*.test.ts
+*.spec.ts
+__tests__/
+
+# Development files
+.eslintrc*
+.prettierrc*
+jest.config.*
+
+# StoreKit config (iOS)
+*.storekit

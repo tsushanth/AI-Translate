@@ -1,0 +1,661 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* AITranslateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* AITranslateApp.swift */; };
+		A10000000000000000000002 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* AppConfig.swift */; };
+		A10000000000000000000003 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* Language.swift */; };
+		A10000000000000000000004 /* Phrasebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* Phrasebook.swift */; };
+		A10000000000000000000005 /* TranslationEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* TranslationEntry.swift */; };
+		A10000000000000000000006 /* TranslationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* TranslationModels.swift */; };
+		A10000000000000000000040 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000040 /* OnboardingPage.swift */; };
+		A10000000000000000000041 /* SubscriptionPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000041 /* SubscriptionPlan.swift */; };
+		A10000000000000000000042 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000042 /* OnboardingView.swift */; };
+		A10000000000000000000043 /* OnboardingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000043 /* OnboardingCardView.swift */; };
+		A10000000000000000000044 /* OnboardingPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000044 /* OnboardingPaywallView.swift */; };
+		A10000000000000000000045 /* PricingPlanCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000045 /* PricingPlanCardView.swift */; };
+		A10000000000000000000007 /* PremiumFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* PremiumFeature.swift */; };
+		A10000000000000000000008 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* PurchaseManager.swift */; };
+		A10000000000000000000009 /* RemoteTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* RemoteTranslationService.swift */; };
+		A10000000000000000000010 /* SpeechPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* SpeechPermissionManager.swift */; };
+		A10000000000000000000011 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* SpeechRecognitionService.swift */; };
+		A10000000000000000000012 /* TextToSpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* TextToSpeechService.swift */; };
+		A10000000000000000000013 /* TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* TranslationService.swift */; };
+		A10000000000000000000014 /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* HistoryStore.swift */; };
+		A10000000000000000000015 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* SettingsStore.swift */; };
+		A10000000000000000000016 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000016 /* HistoryViewModel.swift */; };
+		A10000000000000000000017 /* PhrasebookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* PhrasebookViewModel.swift */; };
+		A10000000000000000000018 /* TranslateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000018 /* TranslateViewModel.swift */; };
+		A10000000000000000000019 /* ActionButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000019 /* ActionButtons.swift */; };
+		A10000000000000000000020 /* HistoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000020 /* HistoryRowView.swift */; };
+		A10000000000000000000021 /* LanguagePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000021 /* LanguagePickerButton.swift */; };
+		A10000000000000000000022 /* TranslationTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000022 /* TranslationTextEditor.swift */; };
+		A10000000000000000000023 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000023 /* HistoryView.swift */; };
+		A10000000000000000000024 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000024 /* MainTabView.swift */; };
+		A10000000000000000000025 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000025 /* PaywallView.swift */; };
+		A10000000000000000000026 /* PhraseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000026 /* PhraseListView.swift */; };
+		A10000000000000000000027 /* PhrasebookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000027 /* PhrasebookView.swift */; };
+		A10000000000000000000028 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000028 /* SettingsView.swift */; };
+		A10000000000000000000029 /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000029 /* TranslateView.swift */; };
+		A10000000000000000000030 /* TranslateViewWithPremium.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000030 /* TranslateViewWithPremium.swift */; };
+		A10000000000000000000031 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000031 /* Assets.xcassets */; };
+		A10000000000000000000032 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000032 /* Preview Assets.xcassets */; };
+		A10000000000000000000033 /* CameraTranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000034 /* CameraTranslateView.swift */; };
+		A10000000000000000000034 /* CameraTranslateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000035 /* CameraTranslateViewModel.swift */; };
+		A10000000000000000000035 /* VoiceConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000036 /* VoiceConversationView.swift */; };
+		A10000000000000000000036 /* VoiceConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000037 /* VoiceConversationViewModel.swift */; };
+		A10000000000000000000037 /* TextTranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000038 /* TextTranslateView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A00000000000000000000001 /* AITranslate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITranslate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000000000000000000001 /* AITranslateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITranslateApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* Phrasebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phrasebook.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* TranslationEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationEntry.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* TranslationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationModels.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* PremiumFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumFeature.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		A20000000000000000000009 /* RemoteTranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTranslationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* SpeechPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechPermissionManager.swift; sourceTree = "<group>"; };
+		A20000000000000000000011 /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
+		A20000000000000000000012 /* TextToSpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeechService.swift; sourceTree = "<group>"; };
+		A20000000000000000000013 /* TranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000014 /* HistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStore.swift; sourceTree = "<group>"; };
+		A20000000000000000000015 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		A20000000000000000000016 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000017 /* PhrasebookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasebookViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000018 /* TranslateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000019 /* ActionButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtons.swift; sourceTree = "<group>"; };
+		A20000000000000000000020 /* HistoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRowView.swift; sourceTree = "<group>"; };
+		A20000000000000000000021 /* LanguagePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagePickerButton.swift; sourceTree = "<group>"; };
+		A20000000000000000000022 /* TranslationTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTextEditor.swift; sourceTree = "<group>"; };
+		A20000000000000000000023 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		A20000000000000000000024 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		A20000000000000000000025 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		A20000000000000000000026 /* PhraseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseListView.swift; sourceTree = "<group>"; };
+		A20000000000000000000027 /* PhrasebookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasebookView.swift; sourceTree = "<group>"; };
+		A20000000000000000000028 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000029 /* TranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateView.swift; sourceTree = "<group>"; };
+		A20000000000000000000030 /* TranslateViewWithPremium.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewWithPremium.swift; sourceTree = "<group>"; };
+		A20000000000000000000031 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000000000000000000032 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		A20000000000000000000033 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000000000000000000034 /* CameraTranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTranslateView.swift; sourceTree = "<group>"; };
+		A20000000000000000000035 /* CameraTranslateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTranslateViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000036 /* VoiceConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceConversationView.swift; sourceTree = "<group>"; };
+		A20000000000000000000037 /* VoiceConversationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceConversationViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000038 /* TextTranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTranslateView.swift; sourceTree = "<group>"; };
+		A20000000000000000000040 /* OnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPage.swift; sourceTree = "<group>"; };
+		A20000000000000000000041 /* SubscriptionPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionPlan.swift; sourceTree = "<group>"; };
+		A20000000000000000000042 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A20000000000000000000043 /* OnboardingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardView.swift; sourceTree = "<group>"; };
+		A20000000000000000000044 /* OnboardingPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPaywallView.swift; sourceTree = "<group>"; };
+		A20000000000000000000045 /* PricingPlanCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingPlanCardView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A30000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000002 /* AITranslate */,
+				A40000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000000000000000000002 /* AITranslate */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000004 /* Sources */,
+				A40000000000000000000005 /* Resources */,
+				A40000000000000000000006 /* Preview Content */,
+				A20000000000000000000033 /* Info.plist */,
+			);
+			path = AITranslate;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000001 /* AITranslate.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000004 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000007 /* App */,
+				A40000000000000000000008 /* Config */,
+				A40000000000000000000009 /* Models */,
+				A40000000000000000000010 /* Services */,
+				A40000000000000000000011 /* Stores */,
+				A40000000000000000000012 /* ViewModels */,
+				A40000000000000000000013 /* Views */,
+				A40000000000000000000014 /* Purchases */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000005 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000031 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000006 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000032 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A40000000000000000000007 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000001 /* AITranslateApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000008 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000002 /* AppConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000009 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000003 /* Language.swift */,
+				A20000000000000000000040 /* OnboardingPage.swift */,
+				A20000000000000000000004 /* Phrasebook.swift */,
+				A20000000000000000000041 /* SubscriptionPlan.swift */,
+				A20000000000000000000005 /* TranslationEntry.swift */,
+				A20000000000000000000006 /* TranslationModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000010 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000009 /* RemoteTranslationService.swift */,
+				A20000000000000000000010 /* SpeechPermissionManager.swift */,
+				A20000000000000000000011 /* SpeechRecognitionService.swift */,
+				A20000000000000000000012 /* TextToSpeechService.swift */,
+				A20000000000000000000013 /* TranslationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000011 /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000014 /* HistoryStore.swift */,
+				A20000000000000000000015 /* SettingsStore.swift */,
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000012 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000016 /* HistoryViewModel.swift */,
+				A20000000000000000000017 /* PhrasebookViewModel.swift */,
+				A20000000000000000000018 /* TranslateViewModel.swift */,
+				A20000000000000000000035 /* CameraTranslateViewModel.swift */,
+				A20000000000000000000037 /* VoiceConversationViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000013 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000019 /* Camera */,
+				A40000000000000000000020 /* Voice */,
+				A40000000000000000000021 /* Text */,
+				A40000000000000000000015 /* Components */,
+				A40000000000000000000022 /* Onboarding */,
+				A40000000000000000000016 /* Paywall */,
+				A40000000000000000000017 /* Phrasebook */,
+				A40000000000000000000018 /* Settings */,
+				A20000000000000000000023 /* HistoryView.swift */,
+				A20000000000000000000024 /* MainTabView.swift */,
+				A20000000000000000000029 /* TranslateView.swift */,
+				A20000000000000000000030 /* TranslateViewWithPremium.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000022 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000043 /* OnboardingCardView.swift */,
+				A20000000000000000000044 /* OnboardingPaywallView.swift */,
+				A20000000000000000000042 /* OnboardingView.swift */,
+				A20000000000000000000045 /* PricingPlanCardView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000019 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000034 /* CameraTranslateView.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000020 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000036 /* VoiceConversationView.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000021 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000038 /* TextTranslateView.swift */,
+			);
+			path = Text;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000014 /* Purchases */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000007 /* PremiumFeature.swift */,
+				A20000000000000000000008 /* PurchaseManager.swift */,
+			);
+			path = Purchases;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000015 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000019 /* ActionButtons.swift */,
+				A20000000000000000000020 /* HistoryRowView.swift */,
+				A20000000000000000000021 /* LanguagePickerButton.swift */,
+				A20000000000000000000022 /* TranslationTextEditor.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000016 /* Paywall */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000025 /* PaywallView.swift */,
+			);
+			path = Paywall;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000017 /* Phrasebook */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000026 /* PhraseListView.swift */,
+				A20000000000000000000027 /* PhrasebookView.swift */,
+			);
+			path = Phrasebook;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000018 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000028 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000000000000000000001 /* AITranslate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000000000000000000001 /* Build configuration list for PBXNativeTarget "AITranslate" */;
+			buildPhases = (
+				A50000000000000000000002 /* Sources */,
+				A30000000000000000000001 /* Frameworks */,
+				A50000000000000000000003 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AITranslate;
+			productName = AITranslate;
+			productReference = A00000000000000000000001 /* AITranslate.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A60000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A50000000000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A70000000000000000000002 /* Build configuration list for PBXProject "AITranslate" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A40000000000000000000001;
+			productRefGroup = A40000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000000000000000000001 /* AITranslate */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A50000000000000000000003 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000031 /* Assets.xcassets in Resources */,
+				A10000000000000000000032 /* Preview Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A50000000000000000000002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* AITranslateApp.swift in Sources */,
+				A10000000000000000000002 /* AppConfig.swift in Sources */,
+				A10000000000000000000003 /* Language.swift in Sources */,
+				A10000000000000000000004 /* Phrasebook.swift in Sources */,
+				A10000000000000000000005 /* TranslationEntry.swift in Sources */,
+				A10000000000000000000006 /* TranslationModels.swift in Sources */,
+				A10000000000000000000007 /* PremiumFeature.swift in Sources */,
+				A10000000000000000000008 /* PurchaseManager.swift in Sources */,
+				A10000000000000000000009 /* RemoteTranslationService.swift in Sources */,
+				A10000000000000000000010 /* SpeechPermissionManager.swift in Sources */,
+				A10000000000000000000011 /* SpeechRecognitionService.swift in Sources */,
+				A10000000000000000000012 /* TextToSpeechService.swift in Sources */,
+				A10000000000000000000013 /* TranslationService.swift in Sources */,
+				A10000000000000000000014 /* HistoryStore.swift in Sources */,
+				A10000000000000000000015 /* SettingsStore.swift in Sources */,
+				A10000000000000000000016 /* HistoryViewModel.swift in Sources */,
+				A10000000000000000000017 /* PhrasebookViewModel.swift in Sources */,
+				A10000000000000000000018 /* TranslateViewModel.swift in Sources */,
+				A10000000000000000000019 /* ActionButtons.swift in Sources */,
+				A10000000000000000000020 /* HistoryRowView.swift in Sources */,
+				A10000000000000000000021 /* LanguagePickerButton.swift in Sources */,
+				A10000000000000000000022 /* TranslationTextEditor.swift in Sources */,
+				A10000000000000000000023 /* HistoryView.swift in Sources */,
+				A10000000000000000000024 /* MainTabView.swift in Sources */,
+				A10000000000000000000025 /* PaywallView.swift in Sources */,
+				A10000000000000000000026 /* PhraseListView.swift in Sources */,
+				A10000000000000000000027 /* PhrasebookView.swift in Sources */,
+				A10000000000000000000028 /* SettingsView.swift in Sources */,
+				A10000000000000000000029 /* TranslateView.swift in Sources */,
+				A10000000000000000000030 /* TranslateViewWithPremium.swift in Sources */,
+				A10000000000000000000033 /* CameraTranslateView.swift in Sources */,
+				A10000000000000000000034 /* CameraTranslateViewModel.swift in Sources */,
+				A10000000000000000000035 /* VoiceConversationView.swift in Sources */,
+				A10000000000000000000036 /* VoiceConversationViewModel.swift in Sources */,
+				A10000000000000000000037 /* TextTranslateView.swift in Sources */,
+				A10000000000000000000040 /* OnboardingPage.swift in Sources */,
+				A10000000000000000000041 /* SubscriptionPlan.swift in Sources */,
+				A10000000000000000000042 /* OnboardingView.swift in Sources */,
+				A10000000000000000000043 /* OnboardingCardView.swift in Sources */,
+				A10000000000000000000044 /* OnboardingPaywallView.swift in Sources */,
+				A10000000000000000000045 /* PricingPlanCardView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A80000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A80000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A80000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AITranslate/Preview Content\"";
+				DEVELOPMENT_TEAM = 7RS696YC75;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AITranslate/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "AI Translate";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "AI Translate needs microphone access to convert your speech into text for translation. Your voice is processed securely and is not stored.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "AI Translate uses speech recognition to transcribe your spoken words into text. This may be processed on-device or via Apple's secure servers depending on your language settings.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kreativekoala.aitranslate;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A80000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AITranslate/Preview Content\"";
+				DEVELOPMENT_TEAM = 7RS696YC75;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AITranslate/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "AI Translate";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "AI Translate needs microphone access to convert your speech into text for translation. Your voice is processed securely and is not stored.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "AI Translate uses speech recognition to transcribe your spoken words into text. This may be processed on-device or via Apple's secure servers depending on your language settings.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kreativekoala.aitranslate;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A70000000000000000000001 /* Build configuration list for PBXNativeTarget "AITranslate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A80000000000000000000003 /* Debug */,
+				A80000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000000000000000000002 /* Build configuration list for PBXProject "AITranslate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A80000000000000000000001 /* Debug */,
+				A80000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A60000000000000000000001 /* Project object */;
+}
