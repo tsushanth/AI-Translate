@@ -5,7 +5,6 @@ import {
   GoogleTranslationProvider,
   DeepLTranslationProvider,
   TranslationProvider,
-  TranslationProviderResult,
 } from './providers';
 
 /**
@@ -50,6 +49,19 @@ class TranslationManager {
   }
 
   /**
+   * Check if DeepL supports the given language pair
+   */
+  private isDeepLLanguageSupported(sourceLanguage: string, targetLanguage: string): boolean {
+    if (!this.deeplProvider) return false;
+
+    // Auto-detect is always supported
+    const sourceSupported = sourceLanguage === 'auto' || this.deeplProvider.isLanguageSupported(sourceLanguage);
+    const targetSupported = this.deeplProvider.isLanguageSupported(targetLanguage);
+
+    return sourceSupported && targetSupported;
+  }
+
+  /**
    * Translate text using the specified provider
    */
   async translate(
@@ -59,6 +71,12 @@ class TranslationManager {
     // Validate provider availability
     if (!this.isProviderAvailable(provider)) {
       logger.warn(`Provider ${provider} not available, falling back to google`);
+      provider = 'google';
+    }
+
+    // Check if DeepL supports the language pair, fall back to Google if not
+    if (provider === 'deepl' && !this.isDeepLLanguageSupported(params.sourceLanguage, params.targetLanguage)) {
+      logger.info(`DeepL does not support language pair ${params.sourceLanguage} -> ${params.targetLanguage}, falling back to google`);
       provider = 'google';
     }
 

@@ -17,14 +17,38 @@ export class DeepLTranslationProvider implements TranslationProvider {
       : 'https://api.deepl.com/v2';
   }
 
+  // Languages supported by DeepL (as of 2025)
+  private static readonly SUPPORTED_LANGUAGES = new Set([
+    'ar', 'bg', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fi', 'fr',
+    'he', 'hu', 'id', 'it', 'ja', 'ko', 'lt', 'lv', 'nb', 'nl', 'pl',
+    'pt', 'ro', 'ru', 'sk', 'sl', 'sv', 'th', 'tr', 'uk', 'vi', 'zh',
+    // Also accept 'no' as it maps to 'nb'
+    'no'
+  ]);
+
+  // Check if a language is supported by DeepL
+  isLanguageSupported(code: string): boolean {
+    return DeepLTranslationProvider.SUPPORTED_LANGUAGES.has(code.toLowerCase());
+  }
+
   // Map common language codes to DeepL format
   private mapLanguageCode(code: string, isTarget: boolean): string {
-    const mappings: Record<string, string> = {
-      'en': isTarget ? 'EN-US' : 'EN', // DeepL requires EN-US or EN-GB for target
-      'pt': isTarget ? 'PT-BR' : 'PT', // Portuguese Brazil for target
-      'zh': 'ZH',
+    const lowerCode = code.toLowerCase();
+
+    // Mapping for special cases
+    const mappings: Record<string, string | ((isTarget: boolean) => string)> = {
+      'en': (isTarget) => isTarget ? 'EN-US' : 'EN', // DeepL requires EN-US or EN-GB for target
+      'pt': (isTarget) => isTarget ? 'PT-BR' : 'PT', // Portuguese Brazil for target
+      'zh': () => 'ZH',
+      'no': () => 'NB', // Norwegian maps to Norwegian Bokmål
     };
-    return mappings[code.toLowerCase()] || code.toUpperCase();
+
+    const mapping = mappings[lowerCode];
+    if (mapping) {
+      return typeof mapping === 'function' ? mapping(isTarget) : mapping;
+    }
+
+    return code.toUpperCase();
   }
 
   async translate(params: TranslationProviderParams): Promise<TranslationProviderResult> {

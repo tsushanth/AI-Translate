@@ -16,6 +16,7 @@
     "sxs": "ts-node scripts/sxs-comparison.ts"
   },
   "dependencies": {
+    "@google-cloud/text-to-speech": "^6.4.0",
     "@google-cloud/translate": "^8.0.0",
     "@supabase/supabase-js": "^2.39.0",
     "cors": "^2.8.5",

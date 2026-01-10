@@ -9,6 +9,7 @@ import { requestIdMiddleware } from './middleware/requestId';
 import { errorHandler } from './middleware/errorHandler';
 import translateRouter from './routes/translate';
 import languagesRouter from './routes/languages';
+import ttsRouter from './routes/tts';
 
 // Create Express app
 const app = express();
@@ -64,6 +65,7 @@ app.get('/health', (_req: Request, res: Response) => {
 // API routes
 app.use('/v1/translate', translateRouter);
 app.use('/v1/languages', languagesRouter);
+app.use('/v1/tts', ttsRouter);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {
