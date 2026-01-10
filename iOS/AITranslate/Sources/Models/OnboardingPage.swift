@@ -8,7 +8,7 @@ struct OnboardingPage: Identifiable, Equatable {
     let systemImage: String
     let imageColor: OnboardingImageColor
 
-    /// Predefined onboarding pages
+    /// Predefined onboarding pages (value propositions)
     static let pages: [OnboardingPage] = [
         OnboardingPage(
             id: 0,
@@ -32,6 +32,15 @@ struct OnboardingPage: Identifiable, Equatable {
             imageColor: .orange
         )
     ]
+
+    /// Offline mode page - shown only for devices that support offline features
+    static let offlinePage = OnboardingPage(
+        id: 100,
+        title: "Works Without Internet",
+        subtitle: "Download AI models to translate completely offline. Perfect for travel or areas with limited connectivity.",
+        systemImage: "iphone.radiowaves.left.and.right.circle.fill",
+        imageColor: .green
+    )
 }
 
 /// Color scheme for onboarding images

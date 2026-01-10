@@ -6,10 +6,19 @@ struct SettingsView: View {
     @Bindable private var settings = SettingsStore.shared
     @ObservedObject private var historyStore = HistoryStore.shared
     @State private var showClearHistoryConfirmation = false
+    @State private var showDeleteModelsConfirmation = false
+
+    private let deviceCapability = DeviceCapabilityChecker.shared.offlineCapability
+    private let modelManager = OfflineModelManager.shared
 
     var body: some View {
         NavigationStack {
             List {
+                // Offline Models Section (only for supported devices)
+                if deviceCapability.supportsOfflineMode {
+                    offlineModelsSection
+                }
+
                 // History Section
                 Section {
                     NavigationLink {
@@ -146,6 +155,116 @@ struct SettingsView: View {
             } message: {
                 Text("This will permanently delete all translation history and favorites. This action cannot be undone.")
             }
+            .confirmationDialog(
+                "Delete Offline Models",
+                isPresented: $showDeleteModelsConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button("Delete All Models", role: .destructive) {
+                    Task {
+                        try? await modelManager.deleteAllModels()
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This will delete all downloaded offline models (\(modelManager.totalDownloadedSizeFormatted())). You can re-download them anytime.")
+            }
+        }
+    }
+
+    // MARK: - Offline Models Section
+
+    @ViewBuilder
+    private var offlineModelsSection: some View {
+        Section {
+            // Device info
+            HStack {
+                Image(systemName: "iphone")
+                    .foregroundStyle(.blue)
+                    .frame(width: 28)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(DeviceCapabilityChecker.shared.deviceName)
+                        .font(.subheadline)
+                    Text(deviceCapability.description)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Text(deviceCapability.displayName)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        Capsule()
+                            .fill(deviceCapability == .fullSupport ? Color.green : Color.orange)
+                    )
+            }
+
+            // Downloaded models
+            NavigationLink {
+                OfflineModelsDetailView()
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.down.circle.fill")
+                        .foregroundStyle(.green)
+                        .frame(width: 28)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Offline Models")
+                        if let package = modelManager.downloadedPackage {
+                            Text("\(package.displayName) - \(modelManager.totalDownloadedSizeFormatted())")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Text("Not downloaded")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    Spacer()
+                    if modelManager.downloadedPackage != nil {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                    }
+                }
+            }
+
+            // Delete models button
+            if modelManager.downloadedPackage != nil {
+                Button(role: .destructive) {
+                    showDeleteModelsConfirmation = true
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                            .frame(width: 28)
+                        Text("Delete Offline Models")
+                    }
+                }
+            }
+        } header: {
+            Text("Offline Mode")
+        } footer: {
+            Text("Download AI models to use translation features without internet. Free users can use offline features.")
+        }
+
+        // TTS Mode Section
+        Section {
+            Picker("Voice Mode", selection: Binding(
+                get: { TTSManager.shared.currentMode },
+                set: { TTSManager.shared.setMode($0) }
+            )) {
+                ForEach(TTSManager.shared.availableModes) { mode in
+                    VStack(alignment: .leading) {
+                        Text(mode.displayName)
+                    }
+                    .tag(mode)
+                }
+            }
+        } header: {
+            Text("Text-to-Speech")
+        } footer: {
+            Text(TTSManager.shared.currentMode.description)
         }
     }
 }

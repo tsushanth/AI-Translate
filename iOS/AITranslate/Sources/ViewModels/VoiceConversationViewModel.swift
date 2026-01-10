@@ -1,9 +1,11 @@
 import Foundation
 import SwiftUI
 import AudioToolbox
+import UIKit
+import Network
 
 /// Side of the conversation
-enum ConversationSide: Equatable {
+enum ConversationSide: Hashable {
     case left
     case right
 }
@@ -60,24 +62,83 @@ final class VoiceConversationViewModel: ObservableObject {
 
     // MARK: - Services
 
-    private let translationService: TranslationService
+    private let remoteTranslationService: TranslationService
     private let speechRecognitionService: SpeechRecognitionService
-    private let textToSpeechService: TextToSpeechService
+    private let ttsManager: TTSManager
+
+    // Offline services (iOS 17.4+)
+    private var appleTranslationService: (any TranslationService)?
 
     // MARK: - Private State
 
     private var currentSide: ConversationSide?
     private var recognizedText: String = ""
 
+    // Network monitoring
+    private let networkMonitor = NWPathMonitor()
+    private let monitorQueue = DispatchQueue(label: "com.sayitai.voicevm.network")
+    @Published private(set) var isOnline: Bool = true
+
+    // Offline mode
+    @Published private(set) var isOfflineMode: Bool = false
+
     // MARK: - Initialization
 
     init() {
-        self.translationService = RemoteTranslationService()
+        self.remoteTranslationService = RemoteTranslationService()
         self.speechRecognitionService = SpeechRecognitionService()
-        self.textToSpeechService = TextToSpeechService()
+        self.ttsManager = TTSManager.shared
+
+        // Initialize Apple Translation service if available (iOS 18.0+)
+        if #available(iOS 18.0, *) {
+            self.appleTranslationService = AppleTranslationService()
+        }
 
         speechRecognitionService.delegate = self
-        textToSpeechService.delegate = self
+        ttsManager.delegate = self
+
+        // Start network monitoring
+        startNetworkMonitoring()
+    }
+
+    deinit {
+        networkMonitor.cancel()
+    }
+
+    // MARK: - Network Monitoring
+
+    private func startNetworkMonitoring() {
+        networkMonitor.pathUpdateHandler = { [weak self] path in
+            let online = path.status == .satisfied
+            Task { @MainActor [weak self] in
+                self?.isOnline = online
+                #if DEBUG
+                print("[VoiceVM] Network status: \(online ? "Online" : "Offline")")
+                #endif
+            }
+        }
+        networkMonitor.start(queue: monitorQueue)
+    }
+
+    /// Check if offline translation is available for current language pair
+    func canTranslateOffline() async -> Bool {
+        guard #available(iOS 18.0, *) else { return false }
+
+        // Check if we have downloaded models
+        guard OfflineModelManager.shared.downloadedPackage?.includesAppleTranslation == true else {
+            return false
+        }
+
+        // Check if Apple Translation supports this language pair
+        let leftCode = leftLanguage.code
+        let rightCode = rightLanguage.code
+
+        // Check both directions (left->right and right->left)
+        let leftToRight = await AppleTranslationService.isOfflineAvailable(from: leftCode, to: rightCode)
+        if leftToRight { return true }
+
+        let rightToLeft = await AppleTranslationService.isOfflineAvailable(from: rightCode, to: leftCode)
+        return rightToLeft
     }
 
     // MARK: - Recording
@@ -93,7 +154,7 @@ final class VoiceConversationViewModel: ObservableObject {
     private func startRecording(for side: ConversationSide) async {
         // Stop any ongoing TTS
         if isSpeaking {
-            textToSpeechService.stop()
+            ttsManager.stop()
         }
 
         // Check and request permissions
@@ -115,6 +176,14 @@ final class VoiceConversationViewModel: ObservableObject {
         // Determine language for recognition
         let language = side == .left ? leftLanguage : rightLanguage
 
+        // Only force on-device recognition when there's no internet
+        // When online, allow server fallback for better accuracy
+        speechRecognitionService.requireOnDeviceRecognition = !isOnline
+
+        #if DEBUG
+        print("[VoiceVM] Starting recording - online: \(isOnline), on-device required: \(!isOnline)")
+        #endif
+
         do {
             // Play audio feedback to indicate listening started
             playRecordingStartSound()
@@ -133,7 +202,14 @@ final class VoiceConversationViewModel: ObservableObject {
         AudioServicesPlaySystemSound(1113) // This is the "begin recording" sound
     }
 
+    /// Plays a system sound to indicate recording has stopped
+    private func playRecordingStopSound() {
+        // Play the "end recording" system sound
+        AudioServicesPlaySystemSound(1114) // This is the "end recording" sound
+    }
+
     func stopRecording() {
+        playRecordingStopSound()
         speechRecognitionService.stopRecording()
     }
 
@@ -146,9 +222,20 @@ final class VoiceConversationViewModel: ObservableObject {
         #if DEBUG
         print("[VoiceVM] translateAndSpeak called with: '\(text)'")
         print("[VoiceVM] Source: \(sourceLanguage.code), Target: \(targetLanguage.code)")
+        print("[VoiceVM] Offline mode: \(isOfflineMode), Online: \(isOnline)")
         #endif
 
         do {
+            // Select translation service based on mode and availability
+            let translationService = await selectTranslationService(
+                from: sourceLanguage.code,
+                to: targetLanguage.code
+            )
+
+            #if DEBUG
+            print("[VoiceVM] Using translation service: \(type(of: translationService))")
+            #endif
+
             let result = try await translationService.translate(
                 text: text,
                 from: sourceLanguage.code,
@@ -181,8 +268,8 @@ final class VoiceConversationViewModel: ObservableObject {
             print("[VoiceVM] Calling TTS speak with language: \(targetLanguage.speechLocaleCode)")
             #endif
 
-            // Speak the translation aloud
-            textToSpeechService.speak(
+            // Speak the translation aloud using TTSManager (handles offline fallback)
+            ttsManager.speak(
                 text: result.translatedText,
                 languageCode: targetLanguage.speechLocaleCode
             )
@@ -195,10 +282,70 @@ final class VoiceConversationViewModel: ObservableObject {
         }
     }
 
+    /// Select the appropriate translation service based on network status and availability
+    private func selectTranslationService(from sourceCode: String, to targetCode: String) async -> any TranslationService {
+        // Only use Apple Translation when there's NO internet connection
+        // When online, always prefer the remote service for better quality
+        if !isOnline {
+            if #available(iOS 18.0, *),
+               let appleService = appleTranslationService,
+               await AppleTranslationService.isOfflineAvailable(from: sourceCode, to: targetCode) {
+                #if DEBUG
+                print("[VoiceVM] Using Apple Translation (offline - no internet)")
+                #endif
+                return appleService
+            }
+
+            // No offline translation available and network is down
+            #if DEBUG
+            print("[VoiceVM] No offline translation available, but network is down")
+            #endif
+        }
+
+        // Default to remote service when online
+        #if DEBUG
+        print("[VoiceVM] Using Remote Translation Service (online)")
+        #endif
+        return remoteTranslationService
+    }
+
     // MARK: - Actions
 
     func clearConversation() {
         messages.removeAll()
+    }
+
+    /// Speak a specific message's translation
+    func speakMessage(_ message: ConversationMessage) {
+        // Stop any current speech
+        if isSpeaking {
+            ttsManager.stop()
+        }
+
+        // Speak the translation in the target language using TTSManager
+        ttsManager.speak(
+            text: message.translatedText,
+            languageCode: message.targetLanguage.speechLocaleCode
+        )
+    }
+
+    /// Copy message text to clipboard
+    func copyMessage(_ message: ConversationMessage) {
+        let textToCopy = "\(message.originalText)\n\(message.translatedText)"
+        UIPasteboard.general.string = textToCopy
+
+        // Play haptic feedback
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
+
+    /// Toggle favorite status for a message
+    func toggleFavorite(_ message: ConversationMessage) {
+        // Play haptic feedback
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+
+        // TODO: Save to favorites store
     }
 
     // MARK: - Error Handling
@@ -289,5 +436,9 @@ extension VoiceConversationViewModel: TextToSpeechDelegate {
             isSpeaking = false
             handleError(error.localizedDescription)
         }
+    }
+
+    nonisolated func textToSpeech(willSpeakRangeOfSpeechString range: NSRange) {
+        // Optional: Could be used for highlighting text being spoken
     }
 }

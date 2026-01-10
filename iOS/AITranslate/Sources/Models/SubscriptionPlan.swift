@@ -7,6 +7,7 @@ struct SubscriptionPlan: Identifiable, Equatable {
     let name: String
     let price: String
     let pricePerMonth: String?
+    let pricePerWeek: String?
     let period: String
     let trialInfo: String?
     let badge: String?
@@ -28,15 +29,24 @@ struct SubscriptionPlan: Identifiable, Equatable {
         if let subscription = product.subscription {
             self.period = subscription.subscriptionPeriod.periodText
 
-            // Calculate price per month for yearly plans
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .currency
+            formatter.locale = product.priceFormatStyle.locale
+
+            // Calculate price per month and per week for yearly plans
             if subscription.subscriptionPeriod.unit == .year {
                 let monthlyPrice = product.price / 12
-                let formatter = NumberFormatter()
-                formatter.numberStyle = .currency
-                formatter.locale = product.priceFormatStyle.locale
+                let weeklyPrice = product.price / 52
                 self.pricePerMonth = formatter.string(from: NSDecimalNumber(decimal: monthlyPrice))
+                self.pricePerWeek = formatter.string(from: NSDecimalNumber(decimal: weeklyPrice))
+            } else if subscription.subscriptionPeriod.unit == .month {
+                // For monthly plans, calculate weekly equivalent
+                let weeklyPrice = product.price / Decimal(4.33) // Average weeks per month
+                self.pricePerMonth = nil
+                self.pricePerWeek = formatter.string(from: NSDecimalNumber(decimal: weeklyPrice))
             } else {
                 self.pricePerMonth = nil
+                self.pricePerWeek = nil
             }
 
             // Get trial info
@@ -48,6 +58,7 @@ struct SubscriptionPlan: Identifiable, Equatable {
         } else {
             self.period = ""
             self.pricePerMonth = nil
+            self.pricePerWeek = nil
             self.trialInfo = nil
         }
 
@@ -69,6 +80,7 @@ struct SubscriptionPlan: Identifiable, Equatable {
         name: String,
         price: String,
         pricePerMonth: String? = nil,
+        pricePerWeek: String? = nil,
         period: String,
         trialInfo: String? = nil,
         badge: String? = nil,
@@ -78,6 +90,7 @@ struct SubscriptionPlan: Identifiable, Equatable {
         self.name = name
         self.price = price
         self.pricePerMonth = pricePerMonth
+        self.pricePerWeek = pricePerWeek
         self.period = period
         self.trialInfo = trialInfo
         self.badge = badge
@@ -105,12 +118,14 @@ struct SubscriptionPlan: Identifiable, Equatable {
     }
 
     /// Placeholder subscription plans (shown while loading)
+    /// Both plans offer 7-day free trial to let users experience the app
     static let placeholderPlans: [SubscriptionPlan] = [
         SubscriptionPlan(
             id: "yearly_placeholder",
             name: "Annual",
             price: "$29.99",
             pricePerMonth: "$2.50",
+            pricePerWeek: "$0.58",
             period: "year",
             trialInfo: "7-day free trial",
             badge: "BEST VALUE",
@@ -119,9 +134,11 @@ struct SubscriptionPlan: Identifiable, Equatable {
         SubscriptionPlan(
             id: "monthly_placeholder",
             name: "Monthly",
-            price: "$5.99",
+            price: "$4.99",
+            pricePerMonth: nil,
+            pricePerWeek: "$1.25",
             period: "month",
-            trialInfo: nil,
+            trialInfo: "7-day free trial",
             badge: nil,
             isBestValue: false
         )

@@ -161,16 +161,23 @@ final class TextToSpeechService: NSObject, TextToSpeechServiceProtocol {
 
         currentLanguageCode = languageCode
 
-        // Create and configure utterance
+        // Create and configure utterance for natural speech
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = voice
-        utterance.rate = clampRate(rate)
+
+        // Use a natural speaking rate - slightly slower than default for clarity
+        // AVSpeechUtteranceDefaultSpeechRate is 0.5, we use 0.48-0.52 range
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.96
+
+        // Natural pitch - avoid too high (robotic) or too low (unnatural)
         utterance.pitchMultiplier = 1.0
+
+        // Full volume
         utterance.volume = 1.0
 
-        // Pre/post delay for natural speech
-        utterance.preUtteranceDelay = 0.2
-        utterance.postUtteranceDelay = 0.1
+        // Minimal delays for responsive speech
+        utterance.preUtteranceDelay = 0.05
+        utterance.postUtteranceDelay = 0.0
 
         // Speak
         #if DEBUG
@@ -202,13 +209,14 @@ final class TextToSpeechService: NSObject, TextToSpeechServiceProtocol {
     private func configureAudioSession() throws {
         let audioSession = AVAudioSession.sharedInstance()
 
-        // Use playback category with duck others option
+        // Use playAndRecord category to allow seamless transition between recording and playback
+        // This is essential for voice conversation mode where we record speech then play translation
         try audioSession.setCategory(
-            .playback,
+            .playAndRecord,
             mode: .spokenAudio,
-            options: [.duckOthers, .interruptSpokenAudioAndMixWithOthers]
+            options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers]
         )
-        try audioSession.setActive(true)
+        try audioSession.setActive(true, options: [])
     }
 
     private func clampRate(_ rate: Float) -> Float {
@@ -224,37 +232,87 @@ final class TextToSpeechService: NSObject, TextToSpeechServiceProtocol {
 
         // Normalize language code for comparison
         let normalizedCode = languageCode.replacingOccurrences(of: "_", with: "-")
-
-        // Priority 1: Enhanced/premium voice with exact match
-        if let enhancedVoice = allVoices.first(where: {
-            $0.language.lowercased() == normalizedCode.lowercased() &&
-            $0.quality == .enhanced
-        }) {
-            return enhancedVoice
-        }
-
-        // Priority 2: Any voice with exact match
-        if let exactMatch = allVoices.first(where: {
-            $0.language.lowercased() == normalizedCode.lowercased()
-        }) {
-            return exactMatch
-        }
-
-        // Priority 3: Match by language prefix (e.g., "en" matches "en-US")
         let languagePrefix = normalizedCode.components(separatedBy: "-").first ?? normalizedCode
 
-        // Prefer enhanced voices
-        if let enhancedPrefix = allVoices.first(where: {
-            $0.language.lowercased().hasPrefix(languagePrefix.lowercased()) &&
-            $0.quality == .enhanced
-        }) {
-            return enhancedPrefix
-        }
-
-        // Fall back to any matching prefix
-        return allVoices.first {
+        // Filter voices for this language
+        let matchingVoices = allVoices.filter {
+            $0.language.lowercased() == normalizedCode.lowercased() ||
             $0.language.lowercased().hasPrefix(languagePrefix.lowercased())
         }
+
+        guard !matchingVoices.isEmpty else {
+            return nil
+        }
+
+        // Sort voices by quality preference
+        // Priority: Premium > Enhanced > Default
+        // Within same quality, prefer exact language match
+        // Also prefer certain high-quality voice identifiers (Siri voices, neural voices)
+        let sortedVoices = matchingVoices.sorted { voice1, voice2 in
+            let score1 = voiceQualityScore(voice1, targetCode: normalizedCode)
+            let score2 = voiceQualityScore(voice2, targetCode: normalizedCode)
+            return score1 > score2
+        }
+
+        #if DEBUG
+        if let best = sortedVoices.first {
+            let qualityName: String
+            if #available(iOS 16.0, *), best.quality == .premium {
+                qualityName = "premium"
+            } else if best.quality == .enhanced {
+                qualityName = "enhanced"
+            } else {
+                qualityName = "default"
+            }
+            print("[TTS] Selected voice: \(best.name) (quality: \(qualityName), language: \(best.language), id: \(best.identifier))")
+        }
+        #endif
+
+        return sortedVoices.first
+    }
+
+    /// Calculates a quality score for voice selection
+    /// Higher scores indicate better/more natural voices
+    private func voiceQualityScore(_ voice: AVSpeechSynthesisVoice, targetCode: String) -> Int {
+        var score = 0
+
+        // Base quality score
+        if #available(iOS 16.0, *) {
+            if voice.quality == .premium {
+                score += 100  // Premium voices are the best (neural TTS)
+            }
+        }
+        if voice.quality == .enhanced {
+            score += 50  // Enhanced voices are good
+        }
+
+        // Exact language match bonus
+        if voice.language.lowercased() == targetCode.lowercased() {
+            score += 20
+        }
+
+        // Prefer voices with "premium", "enhanced", or "compact" in identifier
+        // These are typically the newer, higher quality voices
+        let identifier = voice.identifier.lowercased()
+        if identifier.contains("premium") {
+            score += 80
+        } else if identifier.contains("enhanced") {
+            score += 40
+        }
+
+        // Prefer voices that are NOT "compact" (compact = lower quality)
+        if identifier.contains("compact") {
+            score -= 30
+        }
+
+        // Some specific high-quality voice names to prefer
+        let voiceName = voice.name.lowercased()
+        let highQualityNames = ["samantha", "alex", "karen", "daniel", "moira", "tessa", "fiona", "veena"]
+        if highQualityNames.contains(where: { voiceName.contains($0) }) {
+            score += 15
+        }
+
+        return score
     }
 }
 
@@ -277,7 +335,8 @@ extension TextToSpeechService: AVSpeechSynthesizerDelegate {
         #if DEBUG
         print("[TTS] Speech finished")
         #endif
-        deactivateAudioSession()
+        // Don't deactivate audio session - keep it active for voice conversation mode
+        // This allows seamless transition back to recording
         DispatchQueue.main.async { [weak self] in
             self?.delegate?.textToSpeechDidFinish()
         }
@@ -288,7 +347,7 @@ extension TextToSpeechService: AVSpeechSynthesizerDelegate {
         #if DEBUG
         print("[TTS] Speech cancelled")
         #endif
-        deactivateAudioSession()
+        // Don't deactivate audio session - keep it active for voice conversation mode
         DispatchQueue.main.async { [weak self] in
             self?.delegate?.textToSpeechDidCancel()
         }
@@ -300,10 +359,6 @@ extension TextToSpeechService: AVSpeechSynthesizerDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.delegate?.textToSpeech(willSpeakRangeOfSpeechString: characterRange)
         }
-    }
-
-    private func deactivateAudioSession() {
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }
 }
 

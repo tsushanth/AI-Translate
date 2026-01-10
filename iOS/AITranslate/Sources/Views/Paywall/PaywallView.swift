@@ -281,7 +281,7 @@ struct PaywallView: View {
             HStack(spacing: 16) {
                 Button("Terms of Service") {
                     // Open terms URL
-                    if let url = URL(string: "https://example.com/terms") {
+                    if let url = URL(string: "https://kreativekoala.llc/terms") {
                         UIApplication.shared.open(url)
                     }
                 }
@@ -291,7 +291,7 @@ struct PaywallView: View {
 
                 Button("Privacy Policy") {
                     // Open privacy URL
-                    if let url = URL(string: "https://example.com/privacy") {
+                    if let url = URL(string: "https://kreativekoala.llc/privacy") {
                         UIApplication.shared.open(url)
                     }
                 }

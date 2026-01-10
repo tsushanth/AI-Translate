@@ -214,6 +214,9 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
 
     // MARK: - Recording
 
+    /// Whether to force on-device recognition only (for offline mode)
+    var requireOnDeviceRecognition: Bool = false
+
     func startRecording(languageCode: String) throws {
         // Check if already recording
         guard !isRecording else {
@@ -271,13 +274,22 @@ final class SpeechRecognitionService: NSObject, SpeechRecognitionServiceProtocol
 
         recognitionRequest.shouldReportPartialResults = true
 
-        // Configure recognition - prefer on-device but allow server fallback
+        // Configure recognition - use on-device when required for offline mode
         if #available(iOS 13, *) {
-            // Don't require on-device - allow server fallback for better coverage
-            recognitionRequest.requiresOnDeviceRecognition = false
+            // If offline mode is required and device supports it, force on-device
+            if requireOnDeviceRecognition && recognizer.supportsOnDeviceRecognition {
+                recognitionRequest.requiresOnDeviceRecognition = true
+                #if DEBUG
+                print("[SpeechRecognition] Forcing on-device recognition (offline mode)")
+                #endif
+            } else {
+                // Allow server fallback for better coverage when online
+                recognitionRequest.requiresOnDeviceRecognition = false
+            }
 
             #if DEBUG
             print("[SpeechRecognition] On-device supported: \(recognizer.supportsOnDeviceRecognition)")
+            print("[SpeechRecognition] On-device required: \(recognitionRequest.requiresOnDeviceRecognition)")
             print("[SpeechRecognition] Language: \(languageCode)")
             #endif
         }

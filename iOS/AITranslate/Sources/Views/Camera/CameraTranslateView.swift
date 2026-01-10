@@ -6,6 +6,7 @@ import Vision
 @MainActor
 struct CameraTranslateView: View {
     @StateObject private var viewModel = CameraTranslateViewModel()
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
     @State private var showLanguageSettings = false
 
     // Highlight box state
@@ -73,6 +74,14 @@ struct CameraTranslateView: View {
                             .foregroundStyle(.white)
                             .font(.subheadline)
                     }
+                }
+
+                // Offline overlay
+                if !networkMonitor.isOnline {
+                    OfflineUnavailableOverlay(
+                        feature: "Camera Translation",
+                        suggestion: "Use Voice tab for offline translation"
+                    )
                 }
             }
             .onAppear {

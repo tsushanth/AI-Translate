@@ -12,18 +12,25 @@ enum PurchaseResult {
 
 /// Paywall view specifically designed for onboarding flow
 /// Uses a "hard paywall" approach like iTranslate - user must start trial or subscribe
+/// For devices that support offline mode, users can skip (they get free offline features)
+/// For older devices without Neural Engine, subscription is required (no skip option)
 struct OnboardingPaywallView: View {
     @ObservedObject var purchaseManager: PurchaseManager
     @Binding var selectedPlan: SubscriptionPlan?
     let onSubscribe: (SubscriptionPlan) -> Void
     let onSkip: () -> Void
 
+    /// Whether the user's device supports offline mode (can skip paywall)
+    var canSkipPaywall: Bool = DeviceCapabilityChecker.shared.canSkipPaywall
+
     @State private var purchaseResult: PurchaseResult = .idle
     @State private var showSuccessOverlay: Bool = false
     @State private var showCloseButton: Bool = false
 
-    /// Delay before showing close button (in seconds)
-    private let closeButtonDelay: Double = 3.0
+    /// Delay before showing close button (in seconds) - shorter for devices that can skip
+    private var closeButtonDelay: Double {
+        canSkipPaywall ? 2.0 : 4.0
+    }
 
     /// Computed plans from StoreKit products
     private var plans: [SubscriptionPlan] {
@@ -54,12 +61,14 @@ struct OnboardingPaywallView: View {
 
                         // Headline
                         VStack(spacing: 12) {
-                            Text("Unlock AI Translate Pro")
+                            Text(canSkipPaywall ? "Upgrade to Pro" : "Unlock SayIt AI")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.center)
 
-                            Text("Get unlimited translations, voice conversations, and camera scanning. Communicate confidently in any language.")
+                            Text(canSkipPaywall
+                                ? "Get premium AI voices, faster cloud translation, and an ad-free experience. Or continue free with offline features."
+                                : "Your device requires cloud processing for translation. Subscribe to unlock all features.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
@@ -121,10 +130,22 @@ struct OnboardingPaywallView: View {
 
     private var topBar: some View {
         HStack {
+            // Show device limitation notice for unsupported devices
+            if !canSkipPaywall && showCloseButton {
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                    Text("Subscription required for your device")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
             Spacer()
 
-            // Close button (appears after delay)
-            if showCloseButton {
+            // Close button (appears after delay) - only for devices that can skip
+            if showCloseButton && canSkipPaywall {
                 Button {
                     onSkip()
                 } label: {
@@ -139,7 +160,7 @@ struct OnboardingPaywallView: View {
                 }
                 .transition(.opacity.combined(with: .scale))
                 .accessibilityLabel("Close")
-                .accessibilityHint("Continue with limited free version")
+                .accessibilityHint("Continue with free offline features")
             }
         }
         .padding(.horizontal, 16)
@@ -184,13 +205,47 @@ struct OnboardingPaywallView: View {
     // MARK: - Feature Checklist
 
     private var featureChecklist: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            FeatureCheckRow(text: "Unlimited text translations")
-            FeatureCheckRow(text: "Real-time voice conversations")
-            FeatureCheckRow(text: "Camera & image translation")
-            FeatureCheckRow(text: "30+ languages supported")
-            FeatureCheckRow(text: "Offline phrasebook access")
-            FeatureCheckRow(text: "Ad-free experience")
+        VStack(alignment: .leading, spacing: 16) {
+            // PRO features header
+            HStack {
+                Image(systemName: "crown.fill")
+                    .font(.caption)
+                    .foregroundStyle(.yellow)
+                Text("PRO FEATURES")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.secondary)
+            }
+
+            VStack(alignment: .leading, spacing: 12) {
+                FeatureCheckRow(text: "Premium AI voices (natural sound)", isPro: true)
+                FeatureCheckRow(text: "Cloud translation (faster, more accurate)", isPro: true)
+                FeatureCheckRow(text: "Priority support", isPro: true)
+                FeatureCheckRow(text: "Ad-free experience", isPro: true)
+            }
+
+            Divider()
+                .padding(.vertical, 4)
+
+            // FREE features (if device supports offline)
+            if canSkipPaywall {
+                HStack {
+                    Image(systemName: "gift.fill")
+                        .font(.caption)
+                        .foregroundStyle(.green)
+                    Text("FREE WITH OFFLINE MODE")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.secondary)
+                }
+
+                VStack(alignment: .leading, spacing: 12) {
+                    FeatureCheckRow(text: "Offline speech recognition", isPro: false)
+                    FeatureCheckRow(text: "Offline translation (with NLLB)", isPro: false)
+                    FeatureCheckRow(text: "Basic device TTS", isPro: false)
+                    FeatureCheckRow(text: "Camera text recognition", isPro: false)
+                }
+            }
         }
         .padding(20)
         .background(
@@ -289,8 +344,8 @@ struct OnboardingPaywallView: View {
                 isDisabled: purchaseManager.isPurchasing
             )
         }
-        .padding(.top, 16)
-        .padding(.bottom, 16)
+        .padding(.top, 12)
+        .padding(.bottom, 8)
         .background(Color(.systemBackground))
     }
 
@@ -299,12 +354,12 @@ struct OnboardingPaywallView: View {
     private func handlePurchase() async {
         guard let plan = selectedPlan, let product = plan.storeProduct else {
             #if DEBUG
-            print("[Paywall] No valid plan/product selected")
+            print("[Paywall] No valid plan/product selected - StoreKit products not loaded")
             #endif
-            // If no StoreKit product (placeholder), just complete onboarding
-            if selectedPlan != nil {
-                onSubscribe(selectedPlan!)
-            }
+            // If no StoreKit product (placeholder), show error - don't allow bypass
+            // This prevents users from getting premium features without paying
+            purchaseManager.errorMessage = "Unable to load subscription options. Please check your internet connection and try again."
+            purchaseManager.showError = true
             return
         }
 
@@ -422,12 +477,13 @@ struct OnboardingPaywallView: View {
 
 struct FeatureCheckRow: View {
     let text: String
+    var isPro: Bool = true
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: "checkmark.circle.fill")
+            Image(systemName: isPro ? "checkmark.circle.fill" : "checkmark.circle")
                 .font(.body)
-                .foregroundStyle(.green)
+                .foregroundStyle(isPro ? .blue : .green)
                 .accessibilityHidden(true)
 
             Text(text)
@@ -435,9 +491,16 @@ struct FeatureCheckRow: View {
                 .foregroundStyle(.primary)
 
             Spacer()
+
+            if !isPro {
+                Text("FREE")
+                    .font(.caption2)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.green)
+            }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(text)
+        .accessibilityLabel(text + (isPro ? "" : " - Free"))
     }
 }
 
@@ -529,8 +592,8 @@ struct SubscriptionLegalFooterView: View {
     }
 
     var body: some View {
-        VStack(spacing: 12) {
-            // Main disclosure text
+        VStack(spacing: 6) {
+            // Main disclosure text (compact)
             disclosureTextView
                 .accessibilityElement(children: .combine)
 
@@ -543,27 +606,28 @@ struct SubscriptionLegalFooterView: View {
 
     private var disclosureTextView: some View {
         Text(disclosureString)
-            .font(.caption2)
-            .foregroundStyle(.secondary)
+            .font(.system(size: 9)) // Smaller font to avoid covering subscription options
+            .foregroundStyle(.tertiary)
             .multilineTextAlignment(.center)
-            .padding(.horizontal, 20)
-            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 24)
+            .lineLimit(2)
             .accessibilityLabel(disclosureAccessibilityLabel)
     }
 
     private var disclosureString: String {
         guard let plan = selectedPlan else {
-            return SubscriptionLegalText.genericDisclosure
+            return "Auto-renews. Cancel anytime in Settings."
         }
 
+        // Use short disclosure to keep UI compact
         if let trialInfo = plan.trialInfo {
-            return SubscriptionLegalText.trialDisclosure(
+            return SubscriptionLegalText.shortTrialDisclosure(
                 trialPeriod: trialInfo,
                 price: plan.price,
                 period: plan.period
             )
         } else {
-            return SubscriptionLegalText.standardDisclosure(
+            return SubscriptionLegalText.shortStandardDisclosure(
                 price: plan.price,
                 period: plan.period
             )

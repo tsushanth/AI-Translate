@@ -4,6 +4,7 @@ import SwiftUI
 @MainActor
 struct TextTranslateView: View {
     @StateObject private var viewModel: TranslateViewModel
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
     @State private var showFullscreen = false
     @FocusState private var isTextEditorFocused: Bool
 
@@ -46,6 +47,14 @@ struct TextTranslateView: View {
                 // Bottom language selector
                 languageSelector
             }
+
+            // Offline overlay
+            if !networkMonitor.isOnline {
+                OfflineUnavailableOverlay(
+                    feature: "Text Translation",
+                    suggestion: "Use Voice tab for offline translation"
+                )
+            }
         }
         .alert("Error", isPresented: $viewModel.showError) {
             Button("OK", role: .cancel) {}
@@ -70,7 +79,7 @@ struct TextTranslateView: View {
 
     private var topBar: some View {
         HStack {
-            Text("AI Translate")
+            Text("SayIt AI")
                 .font(.title2)
                 .fontWeight(.bold)
 

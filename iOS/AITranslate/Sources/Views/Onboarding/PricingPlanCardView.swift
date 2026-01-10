@@ -22,38 +22,46 @@ struct PricingPlanCardView: View {
     var body: some View {
         Button(action: onSelect) {
             HStack(spacing: 16) {
+                // Selection indicator (moved to left for better UX)
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title2)
+                    .foregroundStyle(isSelected ? Color.blue : Color.secondary.opacity(0.5))
+
                 // Plan details
-                VStack(alignment: .leading, spacing: 4) {
-                    // Badge (if present)
-                    if let badge = plan.badge {
-                        Text(badge)
-                            .font(.caption2)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .background(
-                                Capsule()
-                                    .fill(Color.orange)
-                            )
+                VStack(alignment: .leading, spacing: 6) {
+                    // Plan name + Badge row
+                    HStack(spacing: 8) {
+                        Text(plan.name)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+
+                        // Badge (if present)
+                        if let badge = plan.badge {
+                            Text(badge)
+                                .font(.caption2)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.orange)
+                                )
+                        }
                     }
 
-                    // Plan name
-                    Text(plan.name)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-
-                    // Subtitle (trial info + monthly price)
-                    if let subtitle = plan.subtitle {
-                        Text(subtitle)
+                    // Subtitle (trial info)
+                    if let trial = plan.trialInfo {
+                        Text(trial)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.green)
+                            .fontWeight(.medium)
                     }
                 }
 
                 Spacer()
 
-                // Price section
+                // Price section - weekly price prominent
                 if isLoading {
                     // Loading state
                     VStack(alignment: .trailing, spacing: 4) {
@@ -66,26 +74,30 @@ struct PricingPlanCardView: View {
                     }
                 } else {
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text(plan.price)
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.primary)
+                        // Weekly price (prominent)
+                        if let weeklyPrice = plan.pricePerWeek {
+                            HStack(spacing: 2) {
+                                Text(weeklyPrice)
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.primary)
+                                Text("/week")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
 
-                        Text("per \(plan.period)")
+                        // Full price (secondary)
+                        Text("\(plan.price)/\(plan.period)")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
-
-                // Selection indicator
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(isSelected ? Color.blue : Color.secondary.opacity(0.5))
             }
             .padding(16)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.secondarySystemBackground))
+                    .fill(isSelected ? Color.blue.opacity(0.05) : Color(.secondarySystemBackground))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)

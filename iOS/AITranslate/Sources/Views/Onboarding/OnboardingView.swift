@@ -2,21 +2,50 @@ import SwiftUI
 import StoreKit
 
 /// Main onboarding flow view with swipeable pages
+/// Device-aware: Shows offline setup for supported devices, subscription-only for older devices
 struct OnboardingView: View {
     @StateObject private var purchaseManager = PurchaseManager.shared
     @State private var currentPage: Int = 0
     @State private var selectedPlan: SubscriptionPlan?
+    @State private var selectedOfflinePackage: OfflineModelPackage?
     @Environment(\.dismiss) private var dismiss
 
     /// Callback when onboarding is completed (subscribed or skipped)
     let onComplete: () -> Void
 
-    /// Total number of pages (value props + pricing)
-    private let totalPages = OnboardingPage.pages.count + 1
+    /// Device capability checker
+    private let deviceCapability = DeviceCapabilityChecker.shared.offlineCapability
+
+    /// Whether the device supports offline mode
+    private var supportsOfflineMode: Bool {
+        deviceCapability.supportsOfflineMode
+    }
+
+    /// Total number of pages varies based on device capability
+    /// For supported devices: value props + offline setup + pricing
+    /// For unsupported devices: value props + pricing
+    private var totalPages: Int {
+        OnboardingPage.pages.count + (supportsOfflineMode ? 2 : 1)
+    }
+
+    /// Page index for offline setup (only valid if device supports offline)
+    private var offlineSetupPageIndex: Int {
+        OnboardingPage.pages.count
+    }
+
+    /// Page index for pricing/paywall
+    private var pricingPageIndex: Int {
+        supportsOfflineMode ? OnboardingPage.pages.count + 1 : OnboardingPage.pages.count
+    }
 
     /// Whether currently on the pricing page
     private var isOnPricingPage: Bool {
-        currentPage == OnboardingPage.pages.count
+        currentPage == pricingPageIndex
+    }
+
+    /// Whether currently on the offline setup page
+    private var isOnOfflineSetupPage: Bool {
+        supportsOfflineMode && currentPage == offlineSetupPageIndex
     }
 
     var body: some View {
@@ -26,8 +55,8 @@ struct OnboardingView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // Top bar with skip button (hidden on pricing page - paywall has its own)
-                if !isOnPricingPage {
+                // Top bar with skip button (hidden on pricing/offline setup pages - they have their own)
+                if !isOnPricingPage && !isOnOfflineSetupPage {
                     topBar
                 }
 
@@ -39,20 +68,35 @@ struct OnboardingView: View {
                             .tag(page.id)
                     }
 
+                    // Offline setup page (only for supported devices)
+                    if supportsOfflineMode {
+                        OfflineModelSetupView(
+                            deviceCapability: deviceCapability,
+                            onContinue: { package in
+                                selectedOfflinePackage = package
+                                withAnimation {
+                                    currentPage = pricingPageIndex
+                                }
+                            }
+                        )
+                        .tag(offlineSetupPageIndex)
+                    }
+
                     // Pricing page (last page) - uses hard paywall with delayed close button
                     OnboardingPaywallView(
                         purchaseManager: purchaseManager,
                         selectedPlan: $selectedPlan,
                         onSubscribe: handleSubscribe,
-                        onSkip: handleSkip
+                        onSkip: handleSkip,
+                        canSkipPaywall: supportsOfflineMode
                     )
-                    .tag(OnboardingPage.pages.count)
+                    .tag(pricingPageIndex)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.easeInOut(duration: 0.3), value: currentPage)
 
-                // Bottom section (page indicator + CTA for value pages)
-                if !isOnPricingPage {
+                // Bottom section (page indicator + CTA for value pages only)
+                if !isOnPricingPage && !isOnOfflineSetupPage {
                     bottomSection
                 }
             }
@@ -153,6 +197,9 @@ struct OnboardingView: View {
     private func completeOnboarding() {
         // Mark onboarding as completed
         OnboardingManager.shared.markOnboardingCompleted()
+
+        // Start the 7-day free trial for premium features (AI voices, etc.)
+        PurchaseManager.shared.startTrialIfNeeded()
 
         // Call completion handler
         onComplete()

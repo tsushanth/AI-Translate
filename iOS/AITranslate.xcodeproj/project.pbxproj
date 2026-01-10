@@ -7,18 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		YYNRPQ0SGSHKQ70U1YZHCV48 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AIGFVZUJ0SN5HFEEA11XTNIX /* NetworkMonitor.swift */; };
+		9037D37426DE6A3420F0D1D2 /* AppleTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD90C79ECB06FE967E6D8E0 /* AppleTranslationService.swift */; };
 		A10000000000000000000001 /* AITranslateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* AITranslateApp.swift */; };
 		A10000000000000000000002 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* AppConfig.swift */; };
 		A10000000000000000000003 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* Language.swift */; };
 		A10000000000000000000004 /* Phrasebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* Phrasebook.swift */; };
 		A10000000000000000000005 /* TranslationEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* TranslationEntry.swift */; };
 		A10000000000000000000006 /* TranslationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* TranslationModels.swift */; };
-		A10000000000000000000040 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000040 /* OnboardingPage.swift */; };
-		A10000000000000000000041 /* SubscriptionPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000041 /* SubscriptionPlan.swift */; };
-		A10000000000000000000042 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000042 /* OnboardingView.swift */; };
-		A10000000000000000000043 /* OnboardingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000043 /* OnboardingCardView.swift */; };
-		A10000000000000000000044 /* OnboardingPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000044 /* OnboardingPaywallView.swift */; };
-		A10000000000000000000045 /* PricingPlanCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000045 /* PricingPlanCardView.swift */; };
 		A10000000000000000000007 /* PremiumFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* PremiumFeature.swift */; };
 		A10000000000000000000008 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* PurchaseManager.swift */; };
 		A10000000000000000000009 /* RemoteTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* RemoteTranslationService.swift */; };
@@ -50,9 +46,25 @@
 		A10000000000000000000035 /* VoiceConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000036 /* VoiceConversationView.swift */; };
 		A10000000000000000000036 /* VoiceConversationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000037 /* VoiceConversationViewModel.swift */; };
 		A10000000000000000000037 /* TextTranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000038 /* TextTranslateView.swift */; };
+		A10000000000000000000040 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000040 /* OnboardingPage.swift */; };
+		A10000000000000000000041 /* SubscriptionPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000041 /* SubscriptionPlan.swift */; };
+		A10000000000000000000042 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000042 /* OnboardingView.swift */; };
+		A10000000000000000000043 /* OnboardingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000043 /* OnboardingCardView.swift */; };
+		A10000000000000000000044 /* OnboardingPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000044 /* OnboardingPaywallView.swift */; };
+		A10000000000000000000045 /* PricingPlanCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000045 /* PricingPlanCardView.swift */; };
+		A10000000000000000000050 /* CloudTTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000050 /* CloudTTSService.swift */; };
+		A10000000000000000000060 /* DeviceCapabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000060 /* DeviceCapabilityChecker.swift */; };
+		A10000000000000000000061 /* OfflineModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000061 /* OfflineModelManager.swift */; };
+		A10000000000000000000062 /* TTSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000062 /* TTSManager.swift */; };
+		A10000000000000000000063 /* OfflineModelSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000063 /* OfflineModelSetupView.swift */; };
+		A10000000000000000000064 /* OfflineModelsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000064 /* OfflineModelsDetailView.swift */; };
+		A10000000000000000000070 /* WhisperKitTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000070 /* WhisperKitTranscriber.swift */; };
+		A10000000000000000000080 /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = A90000000000000000000001 /* WhisperKit */; };
+		EEAB0AFD85A14EB0A299FC8E /* OfflineUnavailableOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5EEE7102BF4846B2373341 /* OfflineUnavailableOverlay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AIGFVZUJ0SN5HFEEA11XTNIX /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		A00000000000000000000001 /* AITranslate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AITranslate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A20000000000000000000001 /* AITranslateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITranslateApp.swift; sourceTree = "<group>"; };
 		A20000000000000000000002 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
@@ -98,6 +110,15 @@
 		A20000000000000000000043 /* OnboardingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardView.swift; sourceTree = "<group>"; };
 		A20000000000000000000044 /* OnboardingPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPaywallView.swift; sourceTree = "<group>"; };
 		A20000000000000000000045 /* PricingPlanCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricingPlanCardView.swift; sourceTree = "<group>"; };
+		A20000000000000000000050 /* CloudTTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTTSService.swift; sourceTree = "<group>"; };
+		A20000000000000000000060 /* DeviceCapabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCapabilityChecker.swift; sourceTree = "<group>"; };
+		A20000000000000000000061 /* OfflineModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModelManager.swift; sourceTree = "<group>"; };
+		A20000000000000000000062 /* TTSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTSManager.swift; sourceTree = "<group>"; };
+		A20000000000000000000063 /* OfflineModelSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModelSetupView.swift; sourceTree = "<group>"; };
+		A20000000000000000000064 /* OfflineModelsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModelsDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000070 /* WhisperKitTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperKitTranscriber.swift; sourceTree = "<group>"; };
+		DCD90C79ECB06FE967E6D8E0 /* AppleTranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleTranslationService.swift; sourceTree = "<group>"; };
+		5F5EEE7102BF4846B2373341 /* OfflineUnavailableOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineUnavailableOverlay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000080 /* WhisperKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,11 +223,18 @@
 		A40000000000000000000010 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A20000000000000000000050 /* CloudTTSService.swift */,
+				A20000000000000000000060 /* DeviceCapabilityChecker.swift */,
+				AIGFVZUJ0SN5HFEEA11XTNIX /* NetworkMonitor.swift */,
+				A20000000000000000000061 /* OfflineModelManager.swift */,
 				A20000000000000000000009 /* RemoteTranslationService.swift */,
 				A20000000000000000000010 /* SpeechPermissionManager.swift */,
+				DCD90C79ECB06FE967E6D8E0 /* AppleTranslationService.swift */,
 				A20000000000000000000011 /* SpeechRecognitionService.swift */,
 				A20000000000000000000012 /* TextToSpeechService.swift */,
 				A20000000000000000000013 /* TranslationService.swift */,
+				A20000000000000000000062 /* TTSManager.swift */,
+				A20000000000000000000070 /* WhisperKitTranscriber.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -250,41 +279,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		A40000000000000000000022 /* Onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				A20000000000000000000043 /* OnboardingCardView.swift */,
-				A20000000000000000000044 /* OnboardingPaywallView.swift */,
-				A20000000000000000000042 /* OnboardingView.swift */,
-				A20000000000000000000045 /* PricingPlanCardView.swift */,
-			);
-			path = Onboarding;
-			sourceTree = "<group>";
-		};
-		A40000000000000000000019 /* Camera */ = {
-			isa = PBXGroup;
-			children = (
-				A20000000000000000000034 /* CameraTranslateView.swift */,
-			);
-			path = Camera;
-			sourceTree = "<group>";
-		};
-		A40000000000000000000020 /* Voice */ = {
-			isa = PBXGroup;
-			children = (
-				A20000000000000000000036 /* VoiceConversationView.swift */,
-			);
-			path = Voice;
-			sourceTree = "<group>";
-		};
-		A40000000000000000000021 /* Text */ = {
-			isa = PBXGroup;
-			children = (
-				A20000000000000000000038 /* TextTranslateView.swift */,
-			);
-			path = Text;
-			sourceTree = "<group>";
-		};
 		A40000000000000000000014 /* Purchases */ = {
 			isa = PBXGroup;
 			children = (
@@ -297,6 +291,7 @@
 		A40000000000000000000015 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				5F5EEE7102BF4846B2373341 /* OfflineUnavailableOverlay.swift */,
 				A20000000000000000000019 /* ActionButtons.swift */,
 				A20000000000000000000020 /* HistoryRowView.swift */,
 				A20000000000000000000021 /* LanguagePickerButton.swift */,
@@ -325,9 +320,46 @@
 		A40000000000000000000018 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				A20000000000000000000064 /* OfflineModelsDetailView.swift */,
 				A20000000000000000000028 /* SettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000019 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000034 /* CameraTranslateView.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000020 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000036 /* VoiceConversationView.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000021 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000038 /* TextTranslateView.swift */,
+			);
+			path = Text;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000022 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000043 /* OnboardingCardView.swift */,
+				A20000000000000000000063 /* OfflineModelSetupView.swift */,
+				A20000000000000000000044 /* OnboardingPaywallView.swift */,
+				A20000000000000000000042 /* OnboardingView.swift */,
+				A20000000000000000000045 /* PricingPlanCardView.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,6 +378,9 @@
 			dependencies = (
 			);
 			name = AITranslate;
+			packageProductDependencies = (
+				A90000000000000000000001 /* WhisperKit */,
+			);
 			productName = AITranslate;
 			productReference = A00000000000000000000001 /* AITranslate.app */;
 			productType = "com.apple.product-type.application";
@@ -374,6 +409,9 @@
 				Base,
 			);
 			mainGroup = A40000000000000000000001;
+			packageReferences = (
+				AB0000000000000000000001 /* XCRemoteSwiftPackageReference "WhisperKit" */,
+			);
 			productRefGroup = A40000000000000000000003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -400,6 +438,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEAB0AFD85A14EB0A299FC8E /* OfflineUnavailableOverlay.swift in Sources */,
+				YYNRPQ0SGSHKQ70U1YZHCV48 /* NetworkMonitor.swift in Sources */,
 				A10000000000000000000001 /* AITranslateApp.swift in Sources */,
 				A10000000000000000000002 /* AppConfig.swift in Sources */,
 				A10000000000000000000003 /* Language.swift in Sources */,
@@ -410,8 +450,10 @@
 				A10000000000000000000008 /* PurchaseManager.swift in Sources */,
 				A10000000000000000000009 /* RemoteTranslationService.swift in Sources */,
 				A10000000000000000000010 /* SpeechPermissionManager.swift in Sources */,
+				9037D37426DE6A3420F0D1D2 /* AppleTranslationService.swift in Sources */,
 				A10000000000000000000011 /* SpeechRecognitionService.swift in Sources */,
 				A10000000000000000000012 /* TextToSpeechService.swift in Sources */,
+				A10000000000000000000050 /* CloudTTSService.swift in Sources */,
 				A10000000000000000000013 /* TranslationService.swift in Sources */,
 				A10000000000000000000014 /* HistoryStore.swift in Sources */,
 				A10000000000000000000015 /* SettingsStore.swift in Sources */,
@@ -441,6 +483,12 @@
 				A10000000000000000000043 /* OnboardingCardView.swift in Sources */,
 				A10000000000000000000044 /* OnboardingPaywallView.swift in Sources */,
 				A10000000000000000000045 /* PricingPlanCardView.swift in Sources */,
+				A10000000000000000000060 /* DeviceCapabilityChecker.swift in Sources */,
+				A10000000000000000000061 /* OfflineModelManager.swift in Sources */,
+				A10000000000000000000062 /* TTSManager.swift in Sources */,
+				A10000000000000000000063 /* OfflineModelSetupView.swift in Sources */,
+				A10000000000000000000064 /* OfflineModelsDetailView.swift in Sources */,
+				A10000000000000000000070 /* WhisperKitTranscriber.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,16 +620,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"AITranslate/Preview Content\"";
 				DEVELOPMENT_TEAM = 7RS696YC75;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AITranslate/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "AI Translate";
+				INFOPLIST_KEY_CFBundleDisplayName = "SayIt AI";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "AI Translate needs microphone access to convert your speech into text for translation. Your voice is processed securely and is not stored.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "AI Translate uses speech recognition to transcribe your spoken words into text. This may be processed on-device or via Apple's secure servers depending on your language settings.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "SayIt AI needs microphone access to convert your speech into text for translation. Your voice is processed securely and is not stored.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "SayIt AI uses speech recognition to transcribe your spoken words into text. This may be processed on-device or via Apple's secure servers depending on your language settings.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -591,7 +639,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kreativekoala.aitranslate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -606,16 +654,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"AITranslate/Preview Content\"";
 				DEVELOPMENT_TEAM = 7RS696YC75;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AITranslate/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "AI Translate";
+				INFOPLIST_KEY_CFBundleDisplayName = "SayIt AI";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "AI Translate needs microphone access to convert your speech into text for translation. Your voice is processed securely and is not stored.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "AI Translate uses speech recognition to transcribe your spoken words into text. This may be processed on-device or via Apple's secure servers depending on your language settings.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "SayIt AI needs microphone access to convert your speech into text for translation. Your voice is processed securely and is not stored.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "SayIt AI uses speech recognition to transcribe your spoken words into text. This may be processed on-device or via Apple's secure servers depending on your language settings.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -625,7 +673,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kreativekoala.aitranslate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -656,6 +704,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AB0000000000000000000001 /* XCRemoteSwiftPackageReference "WhisperKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/argmaxinc/WhisperKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A90000000000000000000001 /* WhisperKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB0000000000000000000001 /* XCRemoteSwiftPackageReference "WhisperKit" */;
+			productName = WhisperKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A60000000000000000000001 /* Project object */;
 }

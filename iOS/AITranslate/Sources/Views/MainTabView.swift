@@ -1,10 +1,12 @@
 import SwiftUI
+import Network
 
 /// Main tab-based navigation container
 @MainActor
 struct MainTabView: View {
     @StateObject private var historyStore = HistoryStore.shared
     @StateObject private var translateViewModel = TranslateViewModel()
+    @StateObject private var networkMonitor = NetworkMonitor()
     @Bindable private var settings = SettingsStore.shared
 
     @State private var selectedTab: Tab = .text
@@ -19,28 +21,28 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            // Text Tab (Translation)
+            // Text Tab (Translation) - Requires internet
             TextTranslateView(viewModel: translateViewModel)
                 .tabItem {
                     Label("Text", systemImage: "text.alignleft")
                 }
                 .tag(Tab.text)
 
-            // Camera Tab (OCR Translation)
+            // Camera Tab (OCR Translation) - Requires internet
             CameraTranslateView()
                 .tabItem {
                     Label("Camera", systemImage: "camera")
                 }
                 .tag(Tab.camera)
 
-            // Voice Tab (Conversation Mode)
+            // Voice Tab (Conversation Mode) - Works offline with downloaded languages!
             VoiceConversationView()
                 .tabItem {
-                    Label("Voice", systemImage: "mic")
+                    Label("Voice", systemImage: networkMonitor.isOnline ? "mic" : "mic.circle.fill")
                 }
                 .tag(Tab.voice)
 
-            // Phrasebook Tab
+            // Phrasebook Tab - Works offline (local storage)
             PhrasebookView(
                 onOpenInTranslator: { phrase, targetLanguage in
                     loadPhraseInTranslator(phrase, targetLanguage: targetLanguage)
@@ -59,6 +61,7 @@ struct MainTabView: View {
                 .tag(Tab.more)
         }
         .preferredColorScheme(settings.appColorScheme.colorScheme)
+        .environmentObject(networkMonitor)
     }
 
     // MARK: - Navigation Actions

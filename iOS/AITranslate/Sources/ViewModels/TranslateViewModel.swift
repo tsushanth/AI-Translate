@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import AudioToolbox
 
 /// ViewModel for the main translation screen
 @MainActor
@@ -58,7 +59,7 @@ final class TranslateViewModel: ObservableObject {
 
     private let translationService: TranslationService
     private let speechRecognitionService: SpeechRecognitionService
-    private let textToSpeechService: TextToSpeechService
+    private let textToSpeechService: CloudTTSService
     private let historyStore: HistoryStore
     private let settings: SettingsStore
 
@@ -72,7 +73,7 @@ final class TranslateViewModel: ObservableObject {
     init(
         translationService: TranslationService = RemoteTranslationService(),
         speechRecognitionService: SpeechRecognitionService = SpeechRecognitionService(),
-        textToSpeechService: TextToSpeechService = TextToSpeechService(),
+        textToSpeechService: CloudTTSService = CloudTTSService(),
         historyStore: HistoryStore = .shared,
         settings: SettingsStore = .shared
     ) {
@@ -240,6 +241,8 @@ final class TranslateViewModel: ObservableObject {
         }
 
         do {
+            // Play start recording sound
+            playRecordingStartSound()
             try speechRecognitionService.startRecording(languageCode: languageCode)
         } catch let error as SpeechRecognitionError {
             handleError(error.localizedDescription)
@@ -250,7 +253,18 @@ final class TranslateViewModel: ObservableObject {
 
     /// Stops voice input
     func stopVoiceInput() {
+        playRecordingStopSound()
         speechRecognitionService.stopRecording()
+    }
+
+    /// Plays a system sound to indicate recording has started
+    private func playRecordingStartSound() {
+        AudioServicesPlaySystemSound(1113)
+    }
+
+    /// Plays a system sound to indicate recording has stopped
+    private func playRecordingStopSound() {
+        AudioServicesPlaySystemSound(1114)
     }
 
     /// Toggles voice input

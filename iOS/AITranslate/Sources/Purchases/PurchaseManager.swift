@@ -29,7 +29,13 @@ final class PurchaseManager: ObservableObject {
         static let isPremium = "isPremiumUser"
         static let subscriptionProductId = "subscriptionProductId"
         static let subscriptionExpirationDate = "subscriptionExpirationDate"
+        static let trialStartDate = "premiumTrialStartDate"
     }
+
+    // MARK: - Trial Configuration
+
+    /// Duration of the free trial in days
+    private static let trialDurationDays: Int = 7
 
     // MARK: - Published State
 
@@ -59,6 +65,39 @@ final class PurchaseManager: ObservableObject {
     /// Whether to show error alert
     @Published var showError: Bool = false
 
+    // MARK: - Trial Properties
+
+    /// The date when the user's trial started (nil if never started)
+    private var trialStartDate: Date? {
+        get { UserDefaults.standard.object(forKey: StorageKey.trialStartDate) as? Date }
+        set { UserDefaults.standard.set(newValue, forKey: StorageKey.trialStartDate) }
+    }
+
+    /// Whether the user is currently in their free trial period
+    var isTrialActive: Bool {
+        guard let startDate = trialStartDate else { return false }
+        let trialEndDate = Calendar.current.date(byAdding: .day, value: Self.trialDurationDays, to: startDate) ?? startDate
+        return Date() < trialEndDate
+    }
+
+    /// Number of days remaining in the trial (0 if expired or not started)
+    var trialDaysRemaining: Int {
+        guard let startDate = trialStartDate else { return 0 }
+        let trialEndDate = Calendar.current.date(byAdding: .day, value: Self.trialDurationDays, to: startDate) ?? startDate
+        let remaining = Calendar.current.dateComponents([.day], from: Date(), to: trialEndDate).day ?? 0
+        return max(0, remaining)
+    }
+
+    /// Whether the user has access to premium features (either through subscription OR active trial)
+    var hasPremiumAccess: Bool {
+        isPremium || isTrialActive
+    }
+
+    /// Whether the trial has been used (started at some point)
+    var hasUsedTrial: Bool {
+        trialStartDate != nil
+    }
+
     // MARK: - Subscription Status
 
     enum SubscriptionStatus: Equatable {
@@ -87,8 +126,13 @@ final class PurchaseManager: ObservableObject {
     // MARK: - Initialization
 
     private init() {
-        // Load cached premium status first (for immediate UI state)
-        isPremium = UserDefaults.standard.bool(forKey: StorageKey.isPremium)
+        // Don't load cached premium status - always verify with App Store
+        // This prevents users from accessing premium features after subscription expires
+        // or when testing on simulator without active Apple ID
+        isPremium = false
+
+        // Clear any stale cached premium status
+        UserDefaults.standard.removeObject(forKey: StorageKey.isPremium)
 
         // Start listening for transactions
         transactionListener = listenForTransactions()
@@ -204,6 +248,36 @@ final class PurchaseManager: ObservableObject {
 
         isPurchasing = false
     }
+
+    // MARK: - Trial Management
+
+    /// Starts the 7-day free trial for premium features
+    /// Call this when the user first installs the app or completes onboarding
+    func startTrialIfNeeded() {
+        // Only start if trial hasn't been used before
+        guard trialStartDate == nil else {
+            #if DEBUG
+            print("[PurchaseManager] Trial already started on \(trialStartDate!)")
+            #endif
+            return
+        }
+
+        trialStartDate = Date()
+        objectWillChange.send()
+
+        #if DEBUG
+        print("[PurchaseManager] Started 7-day premium trial")
+        #endif
+    }
+
+    /// Resets the trial (for testing purposes only)
+    #if DEBUG
+    func resetTrial() {
+        UserDefaults.standard.removeObject(forKey: StorageKey.trialStartDate)
+        objectWillChange.send()
+        print("[PurchaseManager] Trial reset")
+    }
+    #endif
 
     // MARK: - Subscription Status
 

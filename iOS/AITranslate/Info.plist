@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>AI Translate</string>
+	<string>SayIt AI</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,17 +17,17 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>5.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>6</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>AI Translate needs access to your microphone for voice input and speech-to-text translation.</string>
+	<string>SayIt AI needs access to your microphone for voice input and speech-to-text translation.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>AI Translate uses speech recognition to convert your voice into text for translation.</string>
+	<string>SayIt AI uses speech recognition to convert your voice into text for translation.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>AI Translate uses the camera to scan and translate text from signs, menus, documents, and other printed materials.</string>
+	<string>SayIt AI uses the camera to scan and translate text from signs, menus, documents, and other printed materials.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
