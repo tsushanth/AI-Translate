@@ -188,6 +188,59 @@ final class HistoryStore: ObservableObject, HistoryStoreProtocol {
         }
     }
 
+    // MARK: - Offline Translation Cache
+
+    /// Looks up a cached translation for the given text and language pair.
+    /// Enables offline translation lookup for previously translated content.
+    func findCachedTranslation(
+        text: String,
+        sourceLanguage: String,
+        targetLanguage: String
+    ) -> TranslationEntry? {
+        let normalizedText = text.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+
+        return entries.first { entry in
+            let textMatches = entry.sourceText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == normalizedText
+            let targetMatches = entry.targetLanguage == targetLanguage
+            let sourceMatches = sourceLanguage == "auto" || entry.effectiveSourceLanguage == sourceLanguage
+            return textMatches && targetMatches && sourceMatches
+        }
+    }
+
+    /// Checks if a translation is available in the cache
+    func hasCachedTranslation(text: String, sourceLanguage: String, targetLanguage: String) -> Bool {
+        findCachedTranslation(text: text, sourceLanguage: sourceLanguage, targetLanguage: targetLanguage) != nil
+    }
+
+    /// Returns the approximate size of the cache in bytes
+    var cacheSize: Int {
+        guard let data = userDefaults.data(forKey: storageKey) else { return 0 }
+        return data.count
+    }
+
+    /// Returns a formatted string for the cache size
+    var cacheSizeFormatted: String {
+        let bytes = cacheSize
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .file
+        return formatter.string(fromByteCount: Int64(bytes))
+    }
+
+    /// Clears cache entries (non-favorites) older than specified days
+    func clearOldCache(olderThan days: Int) {
+        let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+        entries.removeAll { entry in
+            !entry.isFavorite && entry.createdAt < cutoffDate
+        }
+        saveToStorage()
+    }
+
+    /// Clears all non-favorite entries (cache only)
+    func clearCache() {
+        entries.removeAll { !$0.isFavorite }
+        saveToStorage()
+    }
+
     /// Group entries by date
     func groupedByDate() -> [(date: Date, entries: [TranslationEntry])] {
         let calendar = Calendar.current

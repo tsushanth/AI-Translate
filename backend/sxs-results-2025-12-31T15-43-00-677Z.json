@@ -1,0 +1,317 @@
+{
+  "timestamp": "2025-12-31T15:43:00.678Z",
+  "testCases": 20,
+  "providers": [
+    "Google Cloud Translation"
+  ],
+  "results": [
+    {
+      "testCase": {
+        "text": "Hello, how are you?",
+        "source": "en",
+        "target": "es",
+        "category": "greeting"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "¿Hola, cómo estás?",
+          "latencyMs": 546
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Good morning!",
+        "source": "en",
+        "target": "fr",
+        "category": "greeting"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Bonjour!",
+          "latencyMs": 95
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Where is the nearest restaurant?",
+        "source": "en",
+        "target": "de",
+        "category": "travel"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Wo ist das nächste Restaurant?",
+          "latencyMs": 98
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "How much does this cost?",
+        "source": "en",
+        "target": "ja",
+        "category": "travel"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "これはいくらですか？",
+          "latencyMs": 91
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "I would like to book a room for two nights.",
+        "source": "en",
+        "target": "it",
+        "category": "travel"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Vorrei prenotare una camera per due notti.",
+          "latencyMs": 289
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "The weather forecast suggests it might rain tomorrow, so you should bring an umbrella.",
+        "source": "en",
+        "target": "es",
+        "category": "complex"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "El pronóstico del tiempo sugiere que podría llover mañana, así que debes traer un paraguas.",
+          "latencyMs": 136
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Despite the economic challenges, the company managed to increase its revenue by 15% this quarter.",
+        "source": "en",
+        "target": "de",
+        "category": "complex"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Trotz der wirtschaftlichen Herausforderungen konnte das Unternehmen seinen Umsatz in diesem Quartal um 15 % steigern.",
+          "latencyMs": 161
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "It's raining cats and dogs.",
+        "source": "en",
+        "target": "fr",
+        "category": "idiom"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Il pleut des seaux d'eau.",
+          "latencyMs": 53
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Break a leg!",
+        "source": "en",
+        "target": "es",
+        "category": "idiom"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "¡Rómpete una pierna!",
+          "latencyMs": 101
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Don't put all your eggs in one basket.",
+        "source": "en",
+        "target": "de",
+        "category": "idiom"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Setze nicht alles auf eine Karte.",
+          "latencyMs": 170
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "The API returns a JSON response with the translated text.",
+        "source": "en",
+        "target": "ja",
+        "category": "technical"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "API は翻訳されたテキストを含む JSON 応答を返します。",
+          "latencyMs": 129
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Machine learning models require large datasets for training.",
+        "source": "en",
+        "target": "zh",
+        "category": "technical"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "机器学习模型需要大型数据集进行训练。",
+          "latencyMs": 169
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "I would be grateful if you could assist me with this matter.",
+        "source": "en",
+        "target": "ja",
+        "category": "formal"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "この件についてご協力いただければ幸いです。",
+          "latencyMs": 183
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Please accept my sincere apologies for the inconvenience.",
+        "source": "en",
+        "target": "de",
+        "category": "formal"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Ich bitte vielmals um Entschuldigung für die Unannehmlichkeiten.",
+          "latencyMs": 156
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Hey, what's up? Wanna grab some coffee?",
+        "source": "en",
+        "target": "es",
+        "category": "casual"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Hola, ¿qué pasa? ¿Quieres tomar un café?",
+          "latencyMs": 130
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "That movie was totally awesome, you gotta see it!",
+        "source": "en",
+        "target": "fr",
+        "category": "casual"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Ce film était absolument génial, il faut absolument que tu le voies !",
+          "latencyMs": 138
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "The meeting is scheduled for January 15th, 2025 at 3:30 PM.",
+        "source": "en",
+        "target": "de",
+        "category": "datetime"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Das Treffen ist für den 15. Januar 2025 um 15:30 Uhr angesetzt.",
+          "latencyMs": 131
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "The price is $49.99, but with the 20% discount, it becomes $39.99.",
+        "source": "en",
+        "target": "ja",
+        "category": "numbers"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "価格は 49.99 ドルですが、20% 割引により 39.99 ドルになります。",
+          "latencyMs": 114
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "Could you please tell me where the train station is?",
+        "source": "en",
+        "target": "it",
+        "category": "question"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "Potresti dirmi per favore dove si trova la stazione ferroviaria?",
+          "latencyMs": 118
+        }
+      ]
+    },
+    {
+      "testCase": {
+        "text": "What time does the museum close today?",
+        "source": "en",
+        "target": "es",
+        "category": "question"
+      },
+      "results": [
+        {
+          "provider": "Google Cloud Translation",
+          "translation": "¿A qué hora cierra el museo hoy?",
+          "latencyMs": 107
+        }
+      ]
+    }
+  ],
+  "latencyStats": {
+    "Google Cloud Translation": {
+      "avg": 156,
+      "min": 53,
+      "max": 546,
+      "samples": 20
+    }
+  }
+}

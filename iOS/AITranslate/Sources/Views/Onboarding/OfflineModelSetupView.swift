@@ -6,6 +6,10 @@ struct OfflineModelSetupView: View {
     @State private var isDownloading: Bool = false
     @State private var downloadProgress: Double = 0.0
     @State private var downloadComplete: Bool = false
+    @State private var downloadError: String?
+    @State private var showError: Bool = false
+
+    private let modelManager = OfflineModelManager.shared
 
     let deviceCapability: OfflineCapability
     let onContinue: (OfflineModelPackage?) -> Void
@@ -43,6 +47,19 @@ struct OfflineModelSetupView: View {
 
             // Bottom action section
             bottomActionSection
+        }
+        .alert("Download Error", isPresented: $showError) {
+            Button("Try Again") {
+                handleContinue()
+            }
+            Button("Skip for Now", role: .cancel) {
+                onContinue(nil)
+            }
+        } message: {
+            Text(downloadError ?? "An error occurred while downloading. You can download models later in Settings.")
+        }
+        .onChange(of: modelManager.downloadProgress) { _, progress in
+            downloadProgress = progress
         }
     }
 
@@ -181,12 +198,32 @@ struct OfflineModelSetupView: View {
 
     private var bottomActionSection: some View {
         VStack(spacing: 12) {
+            // Download progress bar (when downloading)
+            if isDownloading {
+                VStack(spacing: 8) {
+                    HStack {
+                        Text("Downloading...")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("\(Int(downloadProgress * 100))%")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.blue)
+                    }
+
+                    ProgressView(value: downloadProgress)
+                        .progressViewStyle(.linear)
+                        .tint(.blue)
+                }
+            }
+
             // Download/Continue button
             Button {
                 handleContinue()
             } label: {
                 HStack(spacing: 8) {
-                    if isDownloading {
+                    if isDownloading && downloadProgress == 0 {
                         ProgressView()
                             .tint(.white)
                     }
@@ -205,7 +242,7 @@ struct OfflineModelSetupView: View {
             .disabled(selectedPackage == nil || isDownloading)
 
             // Size info
-            if let package = selectedPackage, package != .none {
+            if let package = selectedPackage, package != .none, !isDownloading {
                 Text("Download size: \(package.totalSize)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -241,18 +278,29 @@ struct OfflineModelSetupView: View {
             // Skip download
             onContinue(nil)
         } else {
-            // Start download
+            // Start download using OfflineModelManager
             isDownloading = true
+            downloadProgress = 0
 
-            // For now, just simulate download and continue
-            // Real implementation will use OfflineModelManager
             Task {
-                // Simulate download delay for demo
-                try? await Task.sleep(nanoseconds: 500_000_000)
+                do {
+                    try await modelManager.downloadPackage(package)
 
-                await MainActor.run {
-                    isDownloading = false
-                    onContinue(package)
+                    await MainActor.run {
+                        isDownloading = false
+                        downloadComplete = true
+                        onContinue(package)
+                    }
+                } catch {
+                    await MainActor.run {
+                        isDownloading = false
+                        downloadError = error.localizedDescription
+                        showError = true
+
+                        #if DEBUG
+                        print("[OfflineModelSetup] Download failed: \(error)")
+                        #endif
+                    }
                 }
             }
         }

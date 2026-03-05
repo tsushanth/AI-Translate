@@ -112,6 +112,31 @@ final class SettingsStore {
         static let autoDetectLanguage = "settings.autoDetectLanguage"
         static let hapticFeedback = "settings.hapticFeedback"
         static let appColorScheme = "settings.appColorScheme"
+        static let languagePairUsage = "settings.languagePairUsage"
+        static let cacheLimit = "settings.cacheLimit"
+    }
+
+    /// Cache size limit options
+    enum CacheLimit: Int, CaseIterable {
+        case entries50 = 50
+        case entries100 = 100
+        case entries200 = 200
+        case entries500 = 500
+        case unlimited = 0
+
+        var displayName: String {
+            switch self {
+            case .entries50: return "50 entries"
+            case .entries100: return "100 entries"
+            case .entries200: return "200 entries"
+            case .entries500: return "500 entries"
+            case .unlimited: return "Unlimited"
+            }
+        }
+
+        var maxEntries: Int {
+            self == .unlimited ? Int.max : rawValue
+        }
     }
 
     // MARK: - Properties
@@ -144,6 +169,13 @@ final class SettingsStore {
         }
     }
 
+    /// Translation cache size limit
+    var cacheLimit: CacheLimit {
+        didSet {
+            UserDefaults.standard.set(cacheLimit.rawValue, forKey: Keys.cacheLimit)
+        }
+    }
+
     // MARK: - Initialization
 
     private init() {
@@ -166,5 +198,68 @@ final class SettingsStore {
         // Load other settings
         self.autoDetectLanguage = UserDefaults.standard.object(forKey: Keys.autoDetectLanguage) as? Bool ?? true
         self.hapticFeedback = UserDefaults.standard.object(forKey: Keys.hapticFeedback) as? Bool ?? true
+
+        // Load cache limit (default to 100 entries)
+        if let cacheLimitValue = UserDefaults.standard.object(forKey: Keys.cacheLimit) as? Int,
+           let limit = CacheLimit(rawValue: cacheLimitValue) {
+            self.cacheLimit = limit
+        } else {
+            self.cacheLimit = .entries100 // Default
+        }
+    }
+
+    // MARK: - Language Pair Usage Tracking
+
+    /// Represents a language pair with usage count
+    struct LanguagePairUsage: Codable, Hashable {
+        let sourceLanguage: String
+        let targetLanguage: String
+        var usageCount: Int
+
+        var pairKey: String {
+            "\(sourceLanguage)->\(targetLanguage)"
+        }
+    }
+
+    /// Records a translation for the given language pair
+    func recordLanguagePairUsage(source: String, target: String) {
+        var usage = loadLanguagePairUsage()
+
+        // Find existing or create new
+        if let index = usage.firstIndex(where: { $0.sourceLanguage == source && $0.targetLanguage == target }) {
+            usage[index].usageCount += 1
+        } else {
+            usage.append(LanguagePairUsage(sourceLanguage: source, targetLanguage: target, usageCount: 1))
+        }
+
+        saveLanguagePairUsage(usage)
+    }
+
+    /// Returns the most frequently used language pairs
+    func mostUsedLanguagePairs(limit: Int = 5) -> [LanguagePairUsage] {
+        let usage = loadLanguagePairUsage()
+        return Array(usage.sorted { $0.usageCount > $1.usageCount }.prefix(limit))
+    }
+
+    /// Returns language pairs that should be suggested for offline download
+    /// (used more than 5 times and not yet downloaded)
+    func suggestedLanguagePairsForOffline() -> [LanguagePairUsage] {
+        let usage = loadLanguagePairUsage()
+        return usage
+            .filter { $0.usageCount >= 5 }
+            .sorted { $0.usageCount > $1.usageCount }
+    }
+
+    private func loadLanguagePairUsage() -> [LanguagePairUsage] {
+        guard let data = UserDefaults.standard.data(forKey: Keys.languagePairUsage) else {
+            return []
+        }
+        return (try? JSONDecoder().decode([LanguagePairUsage].self, from: data)) ?? []
+    }
+
+    private func saveLanguagePairUsage(_ usage: [LanguagePairUsage]) {
+        if let data = try? JSONEncoder().encode(usage) {
+            UserDefaults.standard.set(data, forKey: Keys.languagePairUsage)
+        }
     }
 }

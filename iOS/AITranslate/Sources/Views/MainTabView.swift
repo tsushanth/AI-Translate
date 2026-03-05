@@ -62,6 +62,9 @@ struct MainTabView: View {
         }
         .preferredColorScheme(settings.appColorScheme.colorScheme)
         .environmentObject(networkMonitor)
+        .onReceive(NotificationCenter.default.publisher(for: .openVoiceTranslation)) { _ in
+            selectedTab = .voice
+        }
     }
 
     // MARK: - Navigation Actions

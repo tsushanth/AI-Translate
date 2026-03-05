@@ -187,6 +187,19 @@ final class OfflineModelManager {
         return formatter.string(fromByteCount: package.totalSizeBytes)
     }
 
+    /// Whether a model restoration is in progress
+    var isRestoringModel: Bool {
+        if case .processing = downloadStatus {
+            return true
+        }
+        return false
+    }
+
+    /// Whether offline models are ready to use
+    var isReady: Bool {
+        downloadedPackage != nil && !isRestoringModel && WhisperKitTranscriber.shared.modelState.isLoaded
+    }
+
     /// Cancel ongoing download
     func cancelDownload() {
         downloadStatus = .idle
@@ -194,18 +207,106 @@ final class OfflineModelManager {
         currentlyDownloading = nil
     }
 
+    // MARK: - Model Restoration
+
+    /// Restores the previously downloaded model after app restart
+    /// Call this when the app becomes active or during initialization
+    func restoreModelIfNeeded() async {
+        guard let savedPackage = UserDefaults.standard.selectedOfflinePackage,
+              savedPackage != .none else {
+            return
+        }
+
+        // If model is already loaded, nothing to do
+        if WhisperKitTranscriber.shared.modelState.isLoaded {
+            downloadedPackage = savedPackage
+            return
+        }
+
+        // Check if model files exist on disk
+        guard let whisperModel = savedPackage.whisperModel else {
+            downloadedPackage = savedPackage
+            return
+        }
+
+        let whisperKitSize = whisperModel.whisperKitModelSize
+
+        // Check if model is available locally (already downloaded)
+        let isAvailable = await WhisperKitTranscriber.shared.isModelAvailable(whisperKitSize)
+
+        #if DEBUG
+        print("[OfflineModelManager] Restoring model: \(savedPackage.displayName)")
+        print("[OfflineModelManager] Model available on disk: \(isAvailable)")
+        #endif
+
+        if isAvailable {
+            // Model exists on disk, reload it
+            do {
+                await MainActor.run {
+                    downloadStatus = .downloading(progress: 0.5)
+                    downloadProgress = 0.5
+                }
+
+                // Load from disk (no download needed)
+                try await WhisperKitTranscriber.shared.loadModel(whisperKitSize, download: false)
+
+                await MainActor.run {
+                    downloadedPackage = savedPackage
+                    downloadStatus = .completed
+                    downloadProgress = 1.0
+                }
+
+                #if DEBUG
+                print("[OfflineModelManager] Model restored successfully")
+                #endif
+
+            } catch {
+                #if DEBUG
+                print("[OfflineModelManager] Failed to restore model: \(error)")
+                #endif
+
+                // Model file may be corrupted, clear state and let user re-download
+                await MainActor.run {
+                    downloadedPackage = nil
+                    downloadStatus = .failed(error: "Model needs to be re-downloaded")
+                }
+                UserDefaults.standard.selectedOfflinePackage = nil
+                UserDefaults.standard.hasDownloadedModels = false
+            }
+        } else {
+            // Model files don't exist (were deleted), clear state
+            #if DEBUG
+            print("[OfflineModelManager] Model files not found, clearing state")
+            #endif
+
+            await MainActor.run {
+                downloadedPackage = nil
+                downloadStatus = .idle
+            }
+            UserDefaults.standard.selectedOfflinePackage = nil
+            UserDefaults.standard.hasDownloadedModels = false
+        }
+    }
+
     // MARK: - Private Methods
 
     private func loadDownloadedState() {
-        // Check if we have a saved package
+        // Check if we have a saved package - just restore the state
+        // The actual model loading happens asynchronously via restoreModelIfNeeded()
         if let savedPackage = UserDefaults.standard.selectedOfflinePackage {
-            // Verify Whisper is still loaded
+            // If model is already in memory, great
             if WhisperKitTranscriber.shared.modelState.isLoaded {
                 downloadedPackage = savedPackage
             } else {
-                // Model was unloaded (app restart), clear state
-                downloadedPackage = nil
-                UserDefaults.standard.selectedOfflinePackage = nil
+                // Model needs to be restored from disk
+                // Set package but mark that restoration is pending
+                downloadedPackage = savedPackage
+                downloadStatus = .processing // Indicates restoration pending
+
+                // Trigger async restoration
+                Task {
+                    await restoreModelIfNeeded()
+                }
             }
         }
     }

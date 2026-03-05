@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import Combine
 import AudioToolbox
+import NaturalLanguage
 
 /// ViewModel for the main translation screen
 @MainActor
@@ -62,10 +63,13 @@ final class TranslateViewModel: ObservableObject {
     private let textToSpeechService: CloudTTSService
     private let historyStore: HistoryStore
     private let settings: SettingsStore
+    private let languageDetectionService: LanguageDetectionService
+    private let networkMonitor: NetworkMonitor
 
     // MARK: - Private State
 
     private var translationTask: Task<Void, Never>?
+    private var languageDetectionTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Initialization
@@ -75,13 +79,17 @@ final class TranslateViewModel: ObservableObject {
         speechRecognitionService: SpeechRecognitionService = SpeechRecognitionService(),
         textToSpeechService: CloudTTSService = CloudTTSService(),
         historyStore: HistoryStore = .shared,
-        settings: SettingsStore = .shared
+        settings: SettingsStore = .shared,
+        languageDetectionService: LanguageDetectionService = .shared,
+        networkMonitor: NetworkMonitor = .shared
     ) {
         self.translationService = translationService
         self.speechRecognitionService = speechRecognitionService
         self.textToSpeechService = textToSpeechService
         self.historyStore = historyStore
         self.settings = settings
+        self.languageDetectionService = languageDetectionService
+        self.networkMonitor = networkMonitor
 
         // Set initial source language based on auto-detect setting
         if settings.autoDetectLanguage {
@@ -105,6 +113,55 @@ final class TranslateViewModel: ObservableObject {
                 self?.currentEntryId = nil
             }
             .store(in: &cancellables)
+
+        // Real-time language detection when source language is set to auto
+        $sourceText
+            .dropFirst()
+            .removeDuplicates()
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .sink { [weak self] text in
+                self?.performLocalLanguageDetection(text)
+            }
+            .store(in: &cancellables)
+    }
+
+    /// Performs local language detection using NLLanguageRecognizer
+    /// This is instant and works completely offline
+    private func performLocalLanguageDetection(_ text: String) {
+        // Only detect if using auto-detect mode
+        guard sourceLanguage.code == "auto" else {
+            return
+        }
+
+        // Cancel any pending detection task
+        languageDetectionTask?.cancel()
+
+        languageDetectionTask = Task {
+            let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            // Need enough text for reliable detection
+            guard trimmedText.count >= 5 else {
+                if detectedLanguage != nil {
+                    detectedLanguage = nil
+                }
+                return
+            }
+
+            // Detect language locally
+            if let result = languageDetectionService.detectLanguageWithConfidence(trimmedText) {
+                // Only update if confidence is reasonable (> 50%)
+                if result.confidence > 0.5 {
+                    let detected = Language.find(byCode: result.languageCode)
+                    if detected != detectedLanguage {
+                        detectedLanguage = detected
+
+                        #if DEBUG
+                        print("[TranslateVM] Local detection: \(result.languageCode) (\(String(format: "%.0f%%", result.confidence * 100)))")
+                        #endif
+                    }
+                }
+            }
+        }
     }
 
     private func setupSpeechDelegates() {
@@ -140,6 +197,31 @@ final class TranslateViewModel: ObservableObject {
         isTranslating = true
         errorMessage = nil
 
+        // When offline, try to use cached translation from history
+        if !networkMonitor.isOnline {
+            let effectiveSourceCode = detectedLanguage?.code ?? sourceLanguage.code
+            if let cached = historyStore.findCachedTranslation(
+                text: sourceText,
+                sourceLanguage: effectiveSourceCode,
+                targetLanguage: targetLanguage.code
+            ) {
+                translatedText = cached.translatedText
+
+                // Update detected language from cache
+                if let detectedCode = cached.detectedLanguage {
+                    detectedLanguage = Language.find(byCode: detectedCode)
+                }
+
+                HapticFeedback.success()
+                isTranslating = false
+
+                #if DEBUG
+                print("[TranslateVM] Used cached translation (offline)")
+                #endif
+                return
+            }
+        }
+
         do {
             let result = try await translationService.translate(
                 text: sourceText,
@@ -165,14 +247,27 @@ final class TranslateViewModel: ObservableObject {
             // Save to history
             saveToHistory()
 
+            // Track language pair usage for smart pre-caching
+            let effectiveSourceCode = result.detectedLanguage ?? sourceLanguage.code
+            settings.recordLanguagePairUsage(source: effectiveSourceCode, target: targetLanguage.code)
+
         } catch is CancellationError {
             return
         } catch let error as TranslationError {
             guard !Task.isCancelled else { return }
-            handleError(error.localizedDescription)
+            // When offline and no cache available, show helpful message
+            if !networkMonitor.isOnline {
+                handleError("You're offline. This translation isn't in your history cache.")
+            } else {
+                handleError(error.localizedDescription)
+            }
         } catch {
             guard !Task.isCancelled else { return }
-            handleError(error.localizedDescription)
+            if !networkMonitor.isOnline {
+                handleError("You're offline. This translation isn't in your history cache.")
+            } else {
+                handleError(error.localizedDescription)
+            }
         }
 
         isTranslating = false

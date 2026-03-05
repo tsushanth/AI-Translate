@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Redesigned text translation view with dark card-based UI
 @MainActor
@@ -10,6 +11,23 @@ struct TextTranslateView: View {
 
     init(viewModel: TranslateViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
+    }
+
+    /// Shows iOS dictionary/definition lookup for the given text
+    private func showDefinitionForText(_ text: String) {
+        guard !text.isEmpty else { return }
+
+        // Find the first word or use the whole text if short
+        let wordToLookup = text.count <= 50 ? text : String(text.split(separator: " ").first ?? Substring(text))
+
+        // Use UIReferenceLibraryViewController for dictionary lookup
+        if UIReferenceLibraryViewController.dictionaryHasDefinition(forTerm: wordToLookup) {
+            let referenceVC = UIReferenceLibraryViewController(term: wordToLookup)
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let rootVC = windowScene.windows.first?.rootViewController {
+                rootVC.present(referenceVC, animated: true)
+            }
+        }
     }
 
     var body: some View {
@@ -48,12 +66,28 @@ struct TextTranslateView: View {
                 languageSelector
             }
 
-            // Offline overlay
+            // Offline banner (non-blocking - allows cached translations)
             if !networkMonitor.isOnline {
-                OfflineUnavailableOverlay(
-                    feature: "Text Translation",
-                    suggestion: "Use Voice tab for offline translation"
-                )
+                VStack {
+                    HStack(spacing: 8) {
+                        Image(systemName: "wifi.slash")
+                            .font(.subheadline)
+                        Text("Offline — cached translations available")
+                            .font(.subheadline)
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(
+                        Capsule()
+                            .fill(Color.orange)
+                    )
+                    .padding(.top, 8)
+
+                    Spacer()
+                }
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .animation(.easeInOut, value: networkMonitor.isOnline)
             }
         }
         .alert("Error", isPresented: $viewModel.showError) {
@@ -187,10 +221,35 @@ struct TextTranslateView: View {
                 }
                 .frame(minHeight: 80)
             } else {
-                Text(viewModel.translatedText)
-                    .font(.body)
-                    .frame(minHeight: 80, alignment: .topLeading)
-                    .textSelection(.enabled)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(viewModel.translatedText)
+                        .font(.body)
+                        .textSelection(.enabled)
+                        .onTapGesture {
+                            // Show definition lookup when tapping translation
+                            showDefinitionForText(viewModel.translatedText)
+                        }
+
+                    // Transliteration for non-Latin scripts
+                    if let transliteration = TransliterationService.shared.transliterate(
+                        viewModel.translatedText,
+                        languageCode: viewModel.targetLanguage.code
+                    ) {
+                        Text(transliteration)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .italic()
+                    }
+
+                    // Hint for dictionary lookup
+                    if !viewModel.translatedText.isEmpty {
+                        Text("Tap text for definitions")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                            .padding(.top, 4)
+                    }
+                }
+                .frame(minHeight: 80, alignment: .topLeading)
             }
         }
         .padding()
