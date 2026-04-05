@@ -8,7 +8,7 @@
     </style>
 
     <!-- Main App Theme -->
-    <style name="Theme.SayItAI" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.SayItAI" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>
