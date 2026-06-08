@@ -7,6 +7,10 @@ struct AITranslateApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
+        // Apple Search Ads attribution: forward the AdServices token to Apple
+        // so installs are credited to ASA campaigns in the ASA dashboard.
+        AttributionService.shared.trackAttribution()
+
         // Start the 7-day trial for existing users who already completed onboarding
         // This ensures users who update the app also get the trial
         if OnboardingManager.shared.hasCompletedOnboarding {
