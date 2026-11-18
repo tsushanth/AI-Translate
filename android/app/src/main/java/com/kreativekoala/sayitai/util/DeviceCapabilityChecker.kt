@@ -62,9 +62,9 @@ enum class WhisperModelSize(val id: String) {
 
     val displayName: String
         get() = when (this) {
-            TINY -> "Tiny"
-            SMALL -> "Small"
-            MEDIUM -> "Medium"
+            TINY -> "Fast"
+            SMALL -> "Balanced"
+            MEDIUM -> "Accurate"
         }
 
     val downloadSize: String

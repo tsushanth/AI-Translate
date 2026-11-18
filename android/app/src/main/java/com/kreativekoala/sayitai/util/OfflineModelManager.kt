@@ -44,10 +44,10 @@ enum class OfflineModelType(val id: String) {
 
     val displayName: String
         get() = when (this) {
-            WHISPER_TINY -> "Whisper Tiny"
-            WHISPER_SMALL -> "Whisper Small"
-            WHISPER_MEDIUM -> "Whisper Medium"
-            NLLB -> "NLLB Translation"
+            WHISPER_TINY -> "Speech recognition (Fast)"
+            WHISPER_SMALL -> "Speech recognition (Balanced)"
+            WHISPER_MEDIUM -> "Speech recognition (Accurate)"
+            NLLB -> "Offline translation"
         }
 
     val fileName: String

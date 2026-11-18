@@ -15,8 +15,8 @@ import javax.inject.Singleton
 private val Context.settingsDataStore by preferencesDataStore(name = "settings")
 
 enum class TranslationProvider(val displayName: String, val description: String) {
-    GOOGLE("Google Translate", "Fast and reliable translation"),
-    DEEPL("DeepL", "More natural phrasing for European languages")
+    GOOGLE("Standard", "Fast and reliable translation"),
+    DEEPL("Natural", "More natural phrasing for European languages")
 }
 
 @Singleton

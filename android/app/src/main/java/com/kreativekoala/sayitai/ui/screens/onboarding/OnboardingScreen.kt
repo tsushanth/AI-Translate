@@ -45,7 +45,7 @@ val onboardingPages = listOf(
     OnboardingPage(
         icon = Icons.Default.Translate,
         title = "Instant Translation",
-        description = "Translate text between 30+ languages with high accuracy using Google Translate or DeepL.",
+        description = "Translate text between 30+ languages with high accuracy.",
         color = Primary
     ),
     OnboardingPage(
