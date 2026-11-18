@@ -291,11 +291,11 @@ private fun buildOfflineStatusSubtitle(
     val parts = mutableListOf<String>()
 
     downloadedWhisperModel?.let {
-        parts.add("Whisper ${it.displayName}")
+        parts.add("Speech: ${it.displayName}")
     }
 
     if (isNLLBDownloaded) {
-        parts.add("NLLB")
+        parts.add("Translation")
     }
 
     return if (parts.isEmpty()) {
@@ -478,7 +478,7 @@ private fun OfflineModelsSheet(
         Spacer(modifier = Modifier.height(8.dp))
 
         ModelRow(
-            title = "NLLB Translation",
+            title = "Offline Translation",
             subtitle = "~600 MB • Enables 30-language translation",
             performanceEstimate = null,
             isDownloaded = isNLLBDownloaded,
@@ -499,7 +499,7 @@ private fun OfflineModelsSheet(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "NLLB enables translation between all 30 languages. Without it, you can only translate speech to English.",
+            text = "Offline translation enables translation between all 30 languages. Without it, you can only translate speech to English.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
